@@ -1,0 +1,11 @@
+res://Screens/InterfaceWindows/ModelWindow.tscn
+res://Screens/UserControlInterface.tscn
+res://Tests/TestModel.tscn
+res://Tests/TestModel.gd
+res://Screens/InterfaceWindows/EnvironmentWindow.tscn
+res://openseeface/main.tscn
+res://Screens/InterfaceWindows/KeyBindsWindow.tscn
+res://openseeface/DataInfo.gd
+res://Screens/InterfaceWindows/ModelWindow.gd
+res://openseeface/OSFHandler.gd
+res://Screens/UserWorld.gd

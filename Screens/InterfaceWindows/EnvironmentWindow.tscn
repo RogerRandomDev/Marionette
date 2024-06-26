@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://mov1cn2gvfv6"]
+
+[node name="EnvironmentWindow" type="Window"]
+initial_position = 4
+size = Vector2i(512, 480)
+visible = false
+wrap_controls = true
+mouse_passthrough = true
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

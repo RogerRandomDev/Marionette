@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://bmi72v4odcnb3"]
+
+[ext_resource type="Script" path="res://Screens/UserWorld.gd" id="1_ablub"]
+[ext_resource type="PackedScene" uid="uid://b1vjhvn8uryt" path="res://Tests/TestModel.tscn" id="2_uhdbc"]
+
+[node name="UserWorld" type="Node3D"]
+script = ExtResource("1_ablub")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 1)
+current = true
+
+[node name="TestModel" parent="." instance=ExtResource("2_uhdbc")]
