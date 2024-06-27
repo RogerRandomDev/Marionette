@@ -1,4 +1,7 @@
 MeshInstance3D
+RemoteTransform3D
+Marker3D
+GPUParticles3D
 PanelContainer
 Panel
 SpinBox
@@ -9,6 +12,3 @@ HBoxContainer
 VBoxContainer
 Window
 PopupPanel
-Node3D
-Camera3D
-MeshInstance2D

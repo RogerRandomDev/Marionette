@@ -26,6 +26,17 @@ func startServer():
 	
 	started = true
 	_isStarted = true
+	var calibrate_on_ready=(
+		func(package,own_method):
+			onDataPackage.disconnect(own_method)
+			if _dataInfo:_dataInfo.calibrate()
+	)
+	onDataPackage.connect(
+		calibrate_on_ready.bind(calibrate_on_ready)
+		
+		)
+	
+	
 
 func _ready():
 	started = false

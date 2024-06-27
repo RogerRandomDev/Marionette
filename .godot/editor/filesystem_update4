@@ -1,11 +1,9 @@
-res://Screens/InterfaceWindows/ModelWindow.tscn
 res://Screens/UserControlInterface.tscn
+res://Tests/Goober/Outline.tres
+res://Tests/Goober/PotatoPin.tres
+res://Tests/Goober/Eyes.gdshader
 res://Tests/TestModel.tscn
+res://Screens/SceneBegin.tscn
+res://Screens/UserWorld.tscn
+res://Screens/InterfaceWindows/ModelWindow.tscn
 res://Tests/TestModel.gd
-res://Screens/InterfaceWindows/EnvironmentWindow.tscn
-res://openseeface/main.tscn
-res://Screens/InterfaceWindows/KeyBindsWindow.tscn
-res://openseeface/DataInfo.gd
-res://Screens/InterfaceWindows/ModelWindow.gd
-res://openseeface/OSFHandler.gd
-res://Screens/UserWorld.gd

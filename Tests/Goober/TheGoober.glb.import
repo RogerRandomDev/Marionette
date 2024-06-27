@@ -30,37 +30,21 @@ animation/trimming=false
 animation/remove_immutable_tracks=true
 import_script/path=""
 _subresources={
+"materials": {
+"Eyes": {
+"use_external/enabled": true,
+"use_external/path": "res://Tests/Goober/Eyes.tres"
+},
+"Outline": {
+"use_external/enabled": true,
+"use_external/path": "res://Tests/Goober/Outline.tres"
+},
+"PotatoPin": {
+"use_external/enabled": true,
+"use_external/path": "res://Tests/Goober/PotatoPin.tres"
+}
+},
 "meshes": {
-"TheGoober_BézierCurve": {
-"generate/lightmap_uv": 0,
-"generate/lods": 2,
-"generate/shadow_meshes": 2,
-"lods/normal_merge_angle": 60.0,
-"lods/normal_split_angle": 25.0,
-"save_to_file/enabled": false,
-"save_to_file/make_streamable": "",
-"save_to_file/path": ""
-},
-"TheGoober_Cone": {
-"generate/lightmap_uv": 0,
-"generate/lods": 2,
-"generate/shadow_meshes": 2,
-"lods/normal_merge_angle": 60.0,
-"lods/normal_split_angle": 25.0,
-"save_to_file/enabled": false,
-"save_to_file/make_streamable": "",
-"save_to_file/path": ""
-},
-"TheGoober_Cube_001": {
-"generate/lightmap_uv": 0,
-"generate/lods": 2,
-"generate/shadow_meshes": 2,
-"lods/normal_merge_angle": 60.0,
-"lods/normal_split_angle": 25.0,
-"save_to_file/enabled": false,
-"save_to_file/make_streamable": "",
-"save_to_file/path": ""
-},
 "TheGoober_Cube_002": {
 "generate/lightmap_uv": 0,
 "generate/lods": 2,
@@ -80,47 +64,6 @@ _subresources={
 "save_to_file/enabled": false,
 "save_to_file/make_streamable": "",
 "save_to_file/path": ""
-},
-"TheGoober_Plane_002": {
-"generate/lightmap_uv": 0,
-"generate/lods": 2,
-"generate/shadow_meshes": 2,
-"lods/normal_merge_angle": 60.0,
-"lods/normal_split_angle": 25.0,
-"save_to_file/enabled": false,
-"save_to_file/make_streamable": "",
-"save_to_file/path": ""
-},
-"TheGoober_Plane_003": {
-"generate/lightmap_uv": 0,
-"generate/lods": 2,
-"generate/shadow_meshes": 2,
-"lods/normal_merge_angle": 60.0,
-"lods/normal_split_angle": 25.0,
-"save_to_file/enabled": false,
-"save_to_file/make_streamable": "",
-"save_to_file/path": ""
-},
-"TheGoober_Plane_004": {
-"generate/lightmap_uv": 0,
-"generate/lods": 2,
-"generate/shadow_meshes": 2,
-"lods/normal_merge_angle": 60.0,
-"lods/normal_split_angle": 25.0,
-"save_to_file/enabled": false,
-"save_to_file/make_streamable": "",
-"save_to_file/path": ""
-}
-},
-"nodes": {
-"PATH:Armature/Skeleton3D/EyePupilL/EyePupilL": {
-"mesh_instance/cast_shadow": 0
-},
-"PATH:Armature/Skeleton3D/EyePupilR/EyePupilR": {
-"mesh_instance/cast_shadow": 0
-},
-"PATH:EyeWhite": {
-"mesh_instance/cast_shadow": 0
 }
 }
 }

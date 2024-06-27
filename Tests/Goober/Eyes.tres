@@ -1,0 +1,7 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://b31k1lyvi8s45"]
+
+[ext_resource type="Shader" path="res://Tests/Goober/Eyes.gdshader" id="1_8ei40"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_8ei40")

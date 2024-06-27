@@ -24,6 +24,12 @@ func _ready():
 	)
 	
 
+func _input(event):
+	if event is InputEventKey and event.as_text()=="K":
+		if $PouchParticles/PotatoPouchBurst.emitting:return
+		$PouchParticles/PotatoPouchBurst.emitting=true
+		$PouchParticles/PotatoPouchBurstStart.emitting=true
+
 
 func _model_update(model_data)->void:
 	#need to move this into a different function later
@@ -41,41 +47,16 @@ func _model_update(model_data)->void:
 	### flop the ears when i open my mouth/widen my mouth
 	###
 	var floopy_amount=(model_data.EyeBrowUpDownLeft.current_value+model_data.EyeBrowUpDownRight.current_value)*0.5
-	
-	var floop_angle=(floopy_amount)*PI*0.25
+	var floop_angle=(floopy_amount)*PI*0.375
 	#left_ear
-	$TheGoober/Armature/Skeleton3D.set_bone_pose_rotation(10,Quaternion.from_euler(Vector3(-PI*0.5+floop_angle,-PI*0.5,0)))
+	$TheGoober/Armature/Skeleton3D.set_bone_pose_rotation(8,Quaternion.from_euler(Vector3(-PI*0.5+floop_angle,-PI*0.5,0)))
 	#right_ear
-	$TheGoober/Armature/Skeleton3D.set_bone_pose_rotation(11,Quaternion.from_euler(Vector3(-PI*0.5+floop_angle,PI*0.5,0)))
-	###
-	### pupils get bigger if i move my eyebrows up really high
-	###
-	var eye_expand_cutoff:float=0.30625
-	var eye_expand_multiplier:float=0.5
-	var eyeSize=Vector3.ONE
-	var eyeScale=(model_data.EyeBrowUpDownLeft.current_value+model_data.EyeBrowUpDownRight.current_value)*0.5
-	if eyeScale>eye_expand_cutoff:
-		big_eyes=true
-		big_eye_timer.stop()
-	else:
-		if big_eyes and big_eye_timer.is_stopped():
-			big_eye_timer.start()
-	eyeSize+=Vector3.ONE*eye_expand_cutoff*float(big_eyes)
-	$TheGoober/Armature/Skeleton3D.set_bone_pose_scale(7,eyeSize)
-	$TheGoober/Armature/Skeleton3D.set_bone_pose_scale(9,eyeSize)
+	$TheGoober/Armature/Skeleton3D.set_bone_pose_rotation(9,Quaternion.from_euler(Vector3(-PI*0.5+floop_angle,PI*0.5,0)))
 	
-	#$TheGoober/Armature/Skeleton3D.set_bone_pose_position(7,eye_positions[0]+(gaze_offset*model_data.leftEyeGaze.current_value)*Vector3(1,0,1))
-	#print(model_data.leftEyeGaze.current_value)
-	var left_eye_up_down:Vector3=Vector3.FORWARD*model_data.leftEyeGaze.current_value
-	left_eye_up_down=Vector3(-0.03*left_eye_up_down.x,0.0,-0.03*left_eye_up_down.y).clamp(Vector3(-0.01,0.0,-0.01),Vector3(0.01,0.0,0.01))
 	
 	var right_eye_up_down:Vector3=Vector3.FORWARD*model_data.rightEyeGaze.current_value
-	right_eye_up_down=Vector3(-0.03*right_eye_up_down.x,0.0,-0.03*right_eye_up_down.y).clamp(Vector3(-0.01,0.0,-0.01),Vector3(0.01,0.0,0.01))
+	right_eye_up_down=Vector3(-0.5*right_eye_up_down.x,0.0,-0.5*right_eye_up_down.y).clamp(Vector3(-0.5,-0.1,-0.01),Vector3(0.5,0.5,0.5))
 	
-	$TheGoober/Armature/Skeleton3D.set_bone_pose_position(7,
-	left_eye_up_down+eye_positions[0]
-	)
+	var ave_updown=right_eye_up_down+Vector3(0.5,0.0,0.5)
+	($TheGoober/Armature/Skeleton3D/EyeWhite/EyeWhite as MeshInstance3D).mesh.surface_get_material(0).set_shader_parameter("eye_pos",Vector2(1.0-ave_updown.x,1.0-ave_updown.z))
 	
-	$TheGoober/Armature/Skeleton3D.set_bone_pose_position(9,
-	right_eye_up_down+eye_positions[1]
-	)

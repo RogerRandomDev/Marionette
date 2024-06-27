@@ -185,7 +185,7 @@ class OsfOption extends HBoxContainer:
 
 var _config: Config = null
 var _is_windows := false
-var _use_binary := false
+var _use_binary := true
 var _tracker_pid := -1
 
 @onready
@@ -228,6 +228,7 @@ func _ready() -> void:
 				return
 			
 			exe_path = _config.binary_path
+			
 		else:
 			if _config.python_path.is_empty():
 				self._update_status("No Python binary configured")
@@ -242,7 +243,8 @@ func _ready() -> void:
 		if not FileAccess.file_exists(exe_path):
 			self._update_status("%s does not exist" % exe_path)
 			return
-		if run_options.front() != null and not FileAccess.file_exists(run_options.front()):
+		
+		if not _use_binary and run_options.front() != null and not FileAccess.file_exists(run_options.front()):
 			return
 		
 		for child in _osf_options.get_children():
@@ -275,8 +277,8 @@ func _ready() -> void:
 	
 	var binary_options := %BinaryOptions as VBoxContainer
 	var python_options := %PythonOptions as VBoxContainer
-	binary_options.hide()
-	python_options.show()
+	binary_options.show()
+	python_options.hide()
 	
 	%ChooseBinary.pressed.connect(func() -> void:
 		var popup := _show_file_dialog()
@@ -321,21 +323,7 @@ func _ready() -> void:
 	%Recalibrate.pressed.connect(
 		func():
 			var _data=$OpenSeeFaceHandler._dataInfo
-			var cali=_data.features["Quaternion"]["calibrate"]
-			var target=_data.features["Quaternion"]["target_value"]
-			_data.features["Quaternion"]["calibrate"]=Quaternion.from_euler(
-				cali.get_euler()+target.get_euler()
-			)
-			cali=_data.features["leftEyeGaze"]["calibrate"]
-			target=_data.features["leftEyeGaze"]["target_value"]
-			_data.features["leftEyeGaze"]["calibrate"]=Quaternion.from_euler(
-				cali.get_euler()+target.get_euler()
-			)
-			cali=_data.features["rightEyeGaze"]["calibrate"]
-			target=_data.features["rightEyeGaze"]["target_value"]
-			_data.features["rightEyeGaze"]["calibrate"]=Quaternion.from_euler(
-				cali.get_euler()+target.get_euler()
-			)
+			_data.calibrate()
 	)
 	
 	

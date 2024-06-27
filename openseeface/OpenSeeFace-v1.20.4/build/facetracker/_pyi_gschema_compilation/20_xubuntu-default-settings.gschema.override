@@ -1,0 +1,46 @@
+[apps.light-locker]
+late-locking=false
+lock-after-screensaver=0
+lock-on-suspend=true
+
+[com.canonical.indicator.sound]
+interested-media-players=[ 'parole', 'rhythmbox' ]
+
+[org.gnome.desktop.background]
+picture-uri='file:///usr/share/xfce4/backdrops/xubuntu-wallpaper.png'
+
+[org.gnome.desktop.interface]
+gtk-theme='Greybird'
+icon-theme='elementary-xfce-darker'
+font-name='Noto Sans 9'
+monospace-font-name='Monospace 10'
+
+[org.gnome.rhythmbox.plugins]
+active-plugins=[ 'alternative-toolbar', 'android', 'artsearch', 'audiocd', 'audioscrobbler', 'daap', 'dbus-media-server', 'generic-player', 'ipod', 'iradio', 'mmkeys', 'mpris', 'mtpdevice', 'notification', 'power-manager', 'rb' ]
+
+[org.gtk.settings.file-chooser]
+window-size='(764, 482)'
+window-position='(19, 61)'
+
+[org.onboard]
+layout='Compact'
+theme='Nightshade'
+key-label-font='Noto Sans'
+key-label-overrides=['RWIN:⌘:super-group', 'LWIN:⌘:super-group']
+xembed-onboard=true
+
+[org.onboard.window]
+docking-enabled=true
+force-to-top=true
+
+[org.xfce.mousepad.preferences.view]
+color-scheme='xubuntu_light'
+font-name='DejaVu Sans Mono 10'
+use-default-monospace-font=false
+
+[org.xfce.mousepad.preferences.window]
+path-in-title=true
+
+[org.xfce.mousepad.state.search]
+direction=1
+wrap-around=true

@@ -108,4 +108,9 @@ func connect_controls():
 				
 				text.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 				$PanelContainer/VBoxContainer.add_child(holder)
-
+	var change_model:Button = %ChangeModel
+	change_model.pressed.connect(
+		func():
+			#should open UI to select file to load.
+			pass
+	)

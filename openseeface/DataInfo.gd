@@ -263,7 +263,22 @@ func _update_features(delta:float)->void:
 		var cur_val=features["rightEyeGaze"]["current_value"]
 		var lerp_speed=features["rightEyeGaze"]["interpolation"]
 		features["rightEyeGaze"]["current_value"]=cur_val.slerp(features["rightEyeGaze"]["target_value"],lerp_speed*delta)
-	
-	
 
 
+##recalibrates values so that current situation is forward/normal
+func calibrate()->void:
+	var cali=features["Quaternion"]["calibrate"]
+	var target=features["Quaternion"]["target_value"]
+	features["Quaternion"]["calibrate"]=Quaternion.from_euler(
+		cali.get_euler()+target.get_euler()
+	)
+	cali=features["leftEyeGaze"]["calibrate"]
+	target=features["leftEyeGaze"]["target_value"]
+	features["leftEyeGaze"]["calibrate"]=Quaternion.from_euler(
+		cali.get_euler()+target.get_euler()
+	)
+	cali=features["rightEyeGaze"]["calibrate"]
+	target=features["rightEyeGaze"]["target_value"]
+	features["rightEyeGaze"]["calibrate"]=Quaternion.from_euler(
+		cali.get_euler()+target.get_euler()
+	)
