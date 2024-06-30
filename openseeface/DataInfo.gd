@@ -282,3 +282,38 @@ func calibrate()->void:
 	features["rightEyeGaze"]["calibrate"]=Quaternion.from_euler(
 		cali.get_euler()+target.get_euler()
 	)
+
+
+func get_storage_dictionary()->Dictionary:
+	var output:Dictionary={}
+	for value in features:
+		output[value]=features[value].duplicate()
+		output[value].erase("target_value")
+		output[value].erase("current_value")
+	
+	return output
+func load_storage_dictionary(input:Dictionary)->void:
+	for value in input:
+		if features[value].has("calibrate"):
+			features[value]["calibrate"]=input[value]["calibrate"]
+		features[value]["interpolation"]=input[value]["interpolation"]
+
+
+func calibrateAll()->void:
+	for feature in features:
+		calibrateFeature(feature)
+		
+func calibrateFeature(feature:String)->void:
+	if !features[feature].has("calibrate"):return
+	var feature_type=typeof(features[feature]["calibrate"])
+	match feature_type:
+		TYPE_QUATERNION:features[feature]["calibrate"]=Quaternion.from_euler(
+				features[feature]["target_value"].get_euler()+features[feature]["calibrate"].get_euler()
+			)
+		TYPE_VECTOR3:features[feature]["calibrate"]=features[feature]["target_value"]+features[feature]["calibrate"]
+		TYPE_VECTOR2:features[feature]["calibrate"]=features[feature]["target_value"]+features[feature]["calibrate"]
+		TYPE_FLOAT:features[feature]["calibrate"]=features[feature]["target_value"]+features[feature]["calibrate"]
+		TYPE_INT:features[feature]["calibrate"]=features[feature]["target_value"]+features[feature]["calibrate"]
+
+func calibrateFeatures(feature_names:Array)->void:
+	for feature_name in feature_names:calibrateFeature(feature_name)

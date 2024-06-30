@@ -1,4 +1,7 @@
-[gd_scene format=3 uid="uid://mov1cn2gvfv6"]
+[gd_scene load_steps=3 format=3 uid="uid://mov1cn2gvfv6"]
+
+[ext_resource type="Script" path="res://Screens/InterfaceWindows/EnvironmentWindow.gd" id="1_oj67u"]
+[ext_resource type="Script" path="res://Screens/InterfaceWindows/ChooseNewEnvironment.gd" id="1_rimkx"]
 
 [node name="EnvironmentWindow" type="Window"]
 initial_position = 4
@@ -6,10 +9,53 @@ size = Vector2i(512, 480)
 visible = false
 wrap_controls = true
 mouse_passthrough = true
+script = ExtResource("1_oj67u")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+horizontal_scroll_mode = 0
+
+[node name="PanelContainer" type="PanelContainer" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "ENVIRONMENT_FILE_PATH"
+
+[node name="ChangeEnvironment" type="Button" parent="ScrollContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Change Model"
+
+[node name="ChooseNewEnvironment" type="Window" parent="."]
+unique_name_in_owner = true
+title = "Choose an Environment"
+initial_position = 4
+size = Vector2i(320, 256)
+visible = false
+always_on_top = true
+popup_window = true
+script = ExtResource("1_rimkx")
+
+[node name="Tree" type="Tree" parent="ChooseNewEnvironment"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+columns = 2
+hide_folding = true
+hide_root = true

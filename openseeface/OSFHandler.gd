@@ -19,22 +19,21 @@ func _onStarted(_newVal):
 	else:
 		started = true
 
+
 func startServer():
-	udpServerComponent = UDPServer.new()
-	var _err = udpServerComponent.listen(listenPort,listenHost)
-	print_debug("opened UDP server: %s:%s" % [listenHost,listenPort])
+	if !udpServerComponent:
+		udpServerComponent = UDPServer.new()
+		var _err = udpServerComponent.listen(listenPort,listenHost)
+		print_debug("opened UDP server: %s:%s" % [listenHost,listenPort])
 	
 	started = true
 	_isStarted = true
-	var calibrate_on_ready=(
-		func(package,own_method):
-			onDataPackage.disconnect(own_method)
-			if _dataInfo:_dataInfo.calibrate()
-	)
-	onDataPackage.connect(
-		calibrate_on_ready.bind(calibrate_on_ready)
-		
-		)
+	#var calibrate_on_ready=(
+		#func(package,own_method):
+			#onDataPackage.disconnect(own_method)
+			#if _dataInfo:_dataInfo.calibrateAll()
+	#)
+	#onDataPackage.connect(calibrate_on_ready.bind(calibrate_on_ready))
 	
 	
 

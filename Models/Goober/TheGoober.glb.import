@@ -1,0 +1,49 @@
+[remap]
+
+importer="scene"
+importer_version=1
+type="PackedScene"
+uid="uid://c35kjj6wm6uws"
+path="res://.godot/imported/TheGoober.glb-6c7aa911eb4944d83a7ae14a4e475a3b.scn"
+
+[deps]
+
+source_file="res://Models/Goober/TheGoober.glb"
+dest_files=["res://.godot/imported/TheGoober.glb-6c7aa911eb4944d83a7ae14a4e475a3b.scn"]
+
+[params]
+
+nodes/root_type=""
+nodes/root_name=""
+nodes/apply_root_scale=true
+nodes/root_scale=1.0
+meshes/ensure_tangents=true
+meshes/generate_lods=false
+meshes/create_shadow_meshes=false
+meshes/light_baking=0
+meshes/lightmap_texel_size=0.2
+meshes/force_disable_compression=false
+skins/use_named_skins=true
+animation/import=true
+animation/fps=30
+animation/trimming=false
+animation/remove_immutable_tracks=true
+import_script/path=""
+_subresources={
+"materials": {
+"Eyes": {
+"use_external/enabled": true,
+"use_external/path": "res://Models/Goober/Eyes.res"
+},
+"Outline": {
+"use_external/enabled": true,
+"use_external/path": "res://Models/Goober/outline.res"
+},
+"PotatoPin": {
+"use_external/enabled": true,
+"use_external/path": "res://Models/Goober/potatopin.res"
+}
+}
+}
+gltf/naming_version=1
+gltf/embedded_image_handling=3

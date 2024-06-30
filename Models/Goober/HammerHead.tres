@@ -1,0 +1,6 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://bdsheq1l0ljho"]
+
+[resource]
+resource_name = "HammerHead"
+cull_mode = 2
+albedo_color = Color(0.127209, 0.0940604, 0.141768, 1)

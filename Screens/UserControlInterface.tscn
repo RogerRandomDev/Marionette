@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://beyb2yf7ox5ta"]
+[gd_scene load_steps=3 format=3 uid="uid://beyb2yf7ox5ta"]
 
 [ext_resource type="Script" path="res://Screens/UserControlInterface.gd" id="1_krcnc"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sq26i"]
+bg_color = Color(0, 0, 0, 1)
 
 [node name="UserControlInterface" type="Control"]
 layout_mode = 3
@@ -11,33 +14,47 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_krcnc")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(108, 0)
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
+offset_right = 108.0
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_sq26i")
 
-[node name="Tracking" type="Button" parent="VBoxContainer"]
+[node name="Basic" type="VBoxContainer" parent="PanelContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(108, 0)
+layout_mode = 2
+
+[node name="Tracking" type="Button" parent="PanelContainer/Basic"]
 layout_mode = 2
 toggle_mode = true
 text = "Tracker"
 
-[node name="Model" type="Button" parent="VBoxContainer"]
+[node name="Model" type="Button" parent="PanelContainer/Basic"]
 layout_mode = 2
 toggle_mode = true
 text = "Model"
 
-[node name="Environment" type="Button" parent="VBoxContainer"]
+[node name="Environment" type="Button" parent="PanelContainer/Basic"]
 layout_mode = 2
 toggle_mode = true
 text = "Environment"
 
-[node name="KeyBinds" type="Button" parent="VBoxContainer"]
+[node name="Variables" type="Button" parent="PanelContainer/Basic"]
+layout_mode = 2
+toggle_mode = true
+text = "Variables"
+
+[node name="KeyBinds" type="Button" parent="PanelContainer/Basic"]
 layout_mode = 2
 toggle_mode = true
 text = "KeyBinds"
 
-[connection signal="toggled" from="VBoxContainer/Tracking" to="." method="_on_tracking_toggled"]
-[connection signal="toggled" from="VBoxContainer/Model" to="." method="_on_model_toggled"]
-[connection signal="toggled" from="VBoxContainer/Environment" to="." method="_on_environment_toggled"]
-[connection signal="toggled" from="VBoxContainer/KeyBinds" to="." method="_on_key_binds_toggled"]
+[connection signal="toggled" from="PanelContainer/Basic/Tracking" to="." method="_on_tracking_toggled"]
+[connection signal="toggled" from="PanelContainer/Basic/Model" to="." method="_on_model_toggled"]
+[connection signal="toggled" from="PanelContainer/Basic/Environment" to="." method="_on_environment_toggled"]
+[connection signal="toggled" from="PanelContainer/Basic/Variables" to="." method="_on_variables_toggled"]
+[connection signal="toggled" from="PanelContainer/Basic/KeyBinds" to="." method="_on_key_binds_toggled"]

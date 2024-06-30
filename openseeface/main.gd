@@ -207,7 +207,7 @@ var _osf_options := %OsfOptions as VBoxContainer
 #-----------------------------------------------------------------------------#
 
 func _ready() -> void:
-	
+	join_tracker()
 	_config = _read_config()
 	
 	_is_windows = OS.get_name().to_lower() == "windows"
@@ -272,7 +272,7 @@ func _ready() -> void:
 			self._update_status("Unable to start tracker")
 		else:
 			_tracker_pid = pid
-			join_tracker()
+			%Run.text="Stop"
 	)
 	
 	var binary_options := %BinaryOptions as VBoxContainer
@@ -323,7 +323,7 @@ func _ready() -> void:
 	%Recalibrate.pressed.connect(
 		func():
 			var _data=$OpenSeeFaceHandler._dataInfo
-			_data.calibrate()
+			_data.calibrateAll()
 	)
 	
 	
@@ -381,5 +381,4 @@ var udp_socket := PacketPeerUDP.new()
 
 func join_tracker():
 	$OpenSeeFaceHandler.startServer()
-	%Run.text="Stop"
-	get_tree().current_scene.get_node("UserWorld").load_OSF()
+	

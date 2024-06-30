@@ -1,9 +1,9 @@
+res://Environment.tres
 res://Screens/UserControlInterface.tscn
-res://Tests/Goober/Outline.tres
-res://Tests/Goober/PotatoPin.tres
-res://Tests/Goober/Eyes.gdshader
-res://Tests/TestModel.tscn
 res://Screens/SceneBegin.tscn
+res://Environments/BrightRoom/Environment.tscn
 res://Screens/UserWorld.tscn
-res://Screens/InterfaceWindows/ModelWindow.tscn
-res://Tests/TestModel.gd
+res://Screens/InterfaceWindows/VariablesWindow.tscn
+res://Environments/TestRoom/Environment.tscn
+res://Models/Goober/TestModel.gd
+res://Utils/ModelBase.gd

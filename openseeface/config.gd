@@ -24,7 +24,7 @@ var osf_path := ""
 @export
 var ip := "127.0.0.1"
 @export
-var port := "11573"
+var port := "11572"
 @export
 var list_cameras := "0"
 @export

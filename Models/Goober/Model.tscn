@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=3 uid="uid://o0upk6eb2nxv"]
+
+[ext_resource type="Script" path="res://Models/Goober/TestModel.gd" id="1_37gd3"]
+[ext_resource type="PackedScene" uid="uid://c35kjj6wm6uws" path="res://Models/Goober/TheGoober.glb" id="2_7xf27"]
+[ext_resource type="PackedScene" uid="uid://b0yhfmw36wlpf" path="res://Models/Goober/FryHammer.glb" id="3_bfhfe"]
+
+[node name="Model" type="Node3D"]
+script = ExtResource("1_37gd3")
+
+[node name="TheGoober" parent="." instance=ExtResource("2_7xf27")]
+
+[node name="FryHammer" parent="." instance=ExtResource("3_bfhfe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.385794, 1.1779, -0.0188444)
+visible = false

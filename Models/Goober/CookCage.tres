@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://5e1rn1fc28k7"]
+
+[resource]
+resource_name = "CookCage"
+cull_mode = 2
+albedo_color = Color(0.708742, 0.737307, 0.906663, 1)
+roughness = 0.5

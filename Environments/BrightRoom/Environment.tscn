@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=3 uid="uid://c60iumkfmfmoy"]
+
+[ext_resource type="Script" path="res://Environments/BrightRoom/BrightRoom.gd" id="1_u7yxe"]
+
+[node name="BrightRoom" type="Node3D"]
+script = ExtResource("1_u7yxe")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+show_behind_parent = true
+z_index = -4096
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="."]
+z_index = -3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 4
+stretch_mode = 6
