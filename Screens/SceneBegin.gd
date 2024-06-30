@@ -8,6 +8,7 @@ func _ready():
 	add_child(world_control_interface)
 	var world_holder_3d=CanvasLayer.new()
 	world_holder_3d.add_child(world_scene)
+	#add_child(world_scene)
 	add_child(world_holder_3d)
 	world_holder_3d.layer=-1
 	

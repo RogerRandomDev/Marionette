@@ -18,6 +18,8 @@ config/icon="res://icon.svg"
 [autoload]
 
 OSF_LOAD="*res://openseeface/main.tscn"
+ModelBinds="*res://Utils/KeyBinds.gd"
+ShapeBinds="*res://Utils/ShapeKeyBinding.gd"
 
 [display]
 

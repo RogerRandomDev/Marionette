@@ -27,34 +27,3 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_sq26i")
 unique_name_in_owner = true
 custom_minimum_size = Vector2(108, 0)
 layout_mode = 2
-
-[node name="Tracking" type="Button" parent="PanelContainer/Basic"]
-layout_mode = 2
-toggle_mode = true
-text = "Tracker"
-
-[node name="Model" type="Button" parent="PanelContainer/Basic"]
-layout_mode = 2
-toggle_mode = true
-text = "Model"
-
-[node name="Environment" type="Button" parent="PanelContainer/Basic"]
-layout_mode = 2
-toggle_mode = true
-text = "Environment"
-
-[node name="Variables" type="Button" parent="PanelContainer/Basic"]
-layout_mode = 2
-toggle_mode = true
-text = "Variables"
-
-[node name="KeyBinds" type="Button" parent="PanelContainer/Basic"]
-layout_mode = 2
-toggle_mode = true
-text = "KeyBinds"
-
-[connection signal="toggled" from="PanelContainer/Basic/Tracking" to="." method="_on_tracking_toggled"]
-[connection signal="toggled" from="PanelContainer/Basic/Model" to="." method="_on_model_toggled"]
-[connection signal="toggled" from="PanelContainer/Basic/Environment" to="." method="_on_environment_toggled"]
-[connection signal="toggled" from="PanelContainer/Basic/Variables" to="." method="_on_variables_toggled"]
-[connection signal="toggled" from="PanelContainer/Basic/KeyBinds" to="." method="_on_key_binds_toggled"]

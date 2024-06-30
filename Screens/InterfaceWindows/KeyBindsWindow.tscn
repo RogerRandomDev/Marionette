@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://bl5agboomcly2"]
+[gd_scene load_steps=2 format=3 uid="uid://bl5agboomcly2"]
+
+[ext_resource type="Script" path="res://Screens/InterfaceWindows/KeyBindsWindow.gd" id="1_0n0lw"]
 
 [node name="KeyBindsWindow" type="Window"]
 initial_position = 4
@@ -6,10 +8,23 @@ size = Vector2i(512, 480)
 visible = false
 wrap_controls = true
 mouse_passthrough = true
+script = ExtResource("1_0n0lw")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Tree" type="Tree" parent="ScrollContainer/PanelContainer"]
+layout_mode = 2
+columns = 2
+hide_folding = true
+enable_recursive_folding = false
+hide_root = true

@@ -9,6 +9,7 @@ var eye_positions:Array=[
 	
 ]
 func _ready():
+	super._ready()
 	big_eye_timer.wait_time=0.25
 	big_eye_timer.one_shot=true
 	big_eye_timer.timeout.connect(func():
@@ -26,6 +27,7 @@ func _ready():
 
 
 
+
 func _model_update(model_data)->void:
 	
 	
@@ -33,10 +35,7 @@ func _model_update(model_data)->void:
 	###
 	### rotate goober's head to match my own
 	###
-	var head_rotation=(-model_data.Quaternion.current_value).get_euler()
-	head_rotation.z*=-1
-	$TheGoober/Armature/Skeleton3D.set_bone_pose_rotation(5,Quaternion.from_euler(head_rotation))
-	
+	_head_rotation_update(model_data["Quaternion"].current_value)
 	###
 	### flop the ears when i open my mouth/widen my mouth
 	###
@@ -63,4 +62,20 @@ func _model_update(model_data)->void:
 		(model_data.EyeLeft.current_value+model_data.EyeRight.current_value)*0.5<blink_tolerance
 	)
 	$TheGoober/Armature/Skeleton3D/EyeWhite/EyeWhite.scale=Vector3(1,float(is_blink)*0.9+0.1,1)
-	
+
+
+
+
+
+func _get_model_keybinds()->Dictionary:
+	return {
+		"ShowHammer":{
+			"keys":"Ctrl+Q",
+			"func":func():$FryHammer.visible=!$FryHammer.visible
+		}
+	}
+
+
+
+
+

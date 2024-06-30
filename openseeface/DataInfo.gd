@@ -1,6 +1,7 @@
 extends RefCounted
 
 
+
 @export var features:Dictionary={
 	"EyeLeft": {
 		"interpolation":0.0,
@@ -117,8 +118,12 @@ extends RefCounted
 ##emitted whenever update_info is run
 signal info_updated(new_info)
 
-
-
+#func _init(on_obj):
+	#create_signals.call_deferred(on_obj)
+#func create_signals(on_obj)->void:
+	#for feature in features:
+		#feature_signals[feature]=Signal(on_obj,StringName("%sUpdated"%feature))
+	
 
 func update_info(OSF_data)->void:
 	
@@ -263,7 +268,8 @@ func _update_features(delta:float)->void:
 		var cur_val=features["rightEyeGaze"]["current_value"]
 		var lerp_speed=features["rightEyeGaze"]["interpolation"]
 		features["rightEyeGaze"]["current_value"]=cur_val.slerp(features["rightEyeGaze"]["target_value"],lerp_speed*delta)
-
+	#for feature in feature_signals:
+		#feature_signals[feature].emit(features[feature]["current_value"])
 
 ##recalibrates values so that current situation is forward/normal
 func calibrate()->void:

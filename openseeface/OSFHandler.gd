@@ -40,11 +40,14 @@ func startServer():
 func _ready():
 	started = false
 	_isStarted = false
-	_dataInfo=load("res://openseeface/DataInfo.gd").new()
+	_dataInfo=load("res://openseeface/DataInfo.gd").new(self)
 	onDataPackage.connect(_dataInfo.update_info)
+	
+	get_tree().current_scene.world_control_interface.shapekeys_window.load_feature_names(_dataInfo.features.keys())
+	
 
 
-func _process(_delta):
+func _physics_process(_delta):
 	if _dataInfo:_dataInfo._update_features(_delta)
 	if _isStarted == false:
 		return

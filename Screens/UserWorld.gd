@@ -34,6 +34,14 @@ func load_model(model:Node)->void:
 	model.name="MODEL"
 	load_OSF.call_deferred()
 	get_tree().current_scene.world_control_interface.variables_window.load_changable_variables.call_deferred(0)
+	#load model keybinds
+	ModelBinds.clear_binds()
+	ModelBinds.load_binds(model.model_keybinds)
+	get_tree().current_scene.world_control_interface.keybinds_window.load_keybinds.call_deferred()
+	get_tree().current_scene.world_control_interface.shapekeys_window.load_new_model_shapekeys.emit(model)
+	get_tree().current_scene.world_control_interface.skeleton_window.new_model_loaded.emit(model)
+
+
 func load_environment(model:Node)->void:
 	if loaded_environment:loaded_environment.queue_free()
 	await get_tree().process_frame
@@ -41,6 +49,8 @@ func load_environment(model:Node)->void:
 	model.name="ENVIRONMENT"
 	add_child(model)
 	get_tree().current_scene.world_control_interface.variables_window.load_changable_variables.call_deferred(1)
-	
 
+
+func _input(event):
+	$SubViewport/Camera3D._input(event)
 

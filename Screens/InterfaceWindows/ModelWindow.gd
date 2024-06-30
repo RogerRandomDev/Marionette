@@ -12,7 +12,7 @@ var camera_controls:Array=[
 		"Name":"CameraPosition",
 		"text":"Camera Position",
 		"default":false,
-		"toggle_on_node":"UserWorld",
+		"toggle_on_node":"./",
 		"toggle_property":"moveCamera"
 	},
 	{
@@ -20,7 +20,7 @@ var camera_controls:Array=[
 		"Name":"CameraRotation",
 		"text":"Camera Rotation",
 		"default":false,
-		"toggle_on_node":"UserWorld",
+		"toggle_on_node":"./",
 		"toggle_property":"rotateCamera"
 	},
 	{
@@ -28,7 +28,7 @@ var camera_controls:Array=[
 		"Name":"CameraZoom",
 		"text":"Camera Zoom",
 		"default":false,
-		"toggle_on_node":"UserWorld",
+		"toggle_on_node":"./",
 		"toggle_property":"zoomCamera"
 	},
 	{
@@ -36,8 +36,8 @@ var camera_controls:Array=[
 		"text":"Reset Camera Position",
 		"func":(
 			func():
-				var world=get_tree().current_scene.get_node("UserWorld")
-				var cam=world.get_node("Camera3D")
+				var world=get_tree().current_scene.world_scene
+				var cam=world.get_node("SubViewport/Camera3D")
 				cam.position=Vector3(0.0,0.5,cam.position.z)
 )
 	},
@@ -46,8 +46,8 @@ var camera_controls:Array=[
 		"text":"Reset Camera Rotation",
 		"func":(
 			func():
-				var world=get_tree().current_scene.get_node("UserWorld")
-				var model=world.get_node_or_null("MODEL")
+				var world=get_tree().current_scene.world_scene
+				var model=world.get_node_or_null("SubViewport/MODEL")
 				if model:model.rotation=Vector3.ZERO
 )
 	},
@@ -56,8 +56,8 @@ var camera_controls:Array=[
 		"text":"Reset Camera Zoom",
 		"func":(
 			func():
-				var world=get_tree().current_scene.get_node("UserWorld")
-				var cam=world.get_node("Camera3D")
+				var world=get_tree().current_scene.world_scene
+				var cam=world.get_node("SubViewport/Camera3D")
 				cam.position.z=1.0
 )
 	}
@@ -170,7 +170,8 @@ func connect_controls():
 				if control.has("toggle_on_node"):
 					edit.toggled.connect(
 						func(is_pressed):
-							var on_node=get_tree().current_scene.get_node(control["toggle_on_node"])
+							var on_node=get_tree().current_scene.world_scene
+							if control["toggle_on_node"]!="./":on_node=on_node.get_node(control["toggle_on_node"])
 							on_node.set(control["toggle_property"],is_pressed)
 					)
 				
@@ -240,6 +241,7 @@ func connect_controls():
 			var world=get_tree().current_scene.world_scene
 			chosen_model=file_path
 			file_path=file_path+"/Model.tscn"
+			
 			world.load_model(load(file_path).instantiate())
 	)
 	visibility_changed.connect(func():self.size=Vector2(320,360))

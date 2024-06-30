@@ -5,6 +5,8 @@ var move_sensitivity:float=0.00625
 var rotation_sensitivity:float=0.00625
 var zoom_rate:float=0.00625
 
+
+
 func _input(event):
 	###
 	### CAMERA ZOOM

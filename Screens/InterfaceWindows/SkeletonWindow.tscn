@@ -1,0 +1,69 @@
+[gd_scene load_steps=2 format=3 uid="uid://ya1hbd3qraib"]
+
+[ext_resource type="Script" path="res://Screens/InterfaceWindows/SkeletonWindow.gd" id="1_wv1gc"]
+
+[node name="ShapeKeysWindow" type="Window"]
+initial_position = 4
+size = Vector2i(420, 360)
+visible = false
+wrap_controls = true
+mouse_passthrough = true
+script = ExtResource("1_wv1gc")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="PanelContainer" type="PanelContainer" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBox" type="HSplitContainer" parent="ScrollContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/autohide = 0
+
+[node name="Tree" type="Tree" parent="ScrollContainer/PanelContainer/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+hide_root = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/PanelContainer/HBox"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ResetSkeletonPose" type="Button" parent="ScrollContainer/PanelContainer/HBox/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Reset All Bones"
+
+[node name="Label" type="Label" parent="ScrollContainer/PanelContainer/HBox/VBoxContainer"]
+layout_mode = 2
+text = "Bone Data"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/PanelContainer/HBox/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="ScrollContainer/PanelContainer/HBox/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Head Bone"
+
+[node name="HeadBoneCheckBox" type="CheckBox" parent="ScrollContainer/PanelContainer/HBox/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Label3" type="Label" parent="ScrollContainer/PanelContainer/HBox/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Eye Bone"
+
+[node name="EyeBoneCheckBox" type="CheckBox" parent="ScrollContainer/PanelContainer/HBox/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
