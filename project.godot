@@ -11,15 +11,22 @@ config_version=5
 [application]
 
 config/name="Marionette"
-run/main_scene="res://Screens/SceneBegin.tscn"
+run/main_scene="res://Screens/InstanceSelection/InstanceSelect.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
-config/icon="res://icon.svg"
+boot_splash/show_image=false
+boot_splash/use_filter=false
+config/icon="res://marionetteLogo.png"
 
 [autoload]
 
 OSF_LOAD="*res://openseeface/main.tscn"
 ModelBinds="*res://Utils/KeyBinds.gd"
 ShapeBinds="*res://Utils/ShapeKeyBinding.gd"
+Globals="*res://Utils/Globals.gd"
+
+[debug_draw_3d]
+
+settings/updates/check_for_updates=false
 
 [display]
 

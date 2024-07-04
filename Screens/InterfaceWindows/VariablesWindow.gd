@@ -3,9 +3,9 @@ extends Window
 
 func load_changable_variables(changed_type:int=0)->void:
 	for variable in $ScrollContainer/PanelContainer/VBoxContainer.get_children():
-		variable.queue_free()
+		variable.free()
 	
-	var environment=get_tree().current_scene.world_scene.loaded_environment
+	var environment=Globals.world.loaded_environment
 	var variables={}
 	if environment!=null:variables=environment.get('EnvironmentValues')
 	if variables==null:variables={}
@@ -16,10 +16,10 @@ func load_changable_variables(changed_type:int=0)->void:
 	
 	for variable in variables:
 		var variable_content=variables[variable]
-		load_variable(variable_content,variable,changed_type==0)
+		load_variable(variable_content,variable,changed_type==1)
 			
 	#now model variables
-	var model=get_tree().current_scene.world_scene.loaded_model
+	var model=Globals.world.loaded_model
 	variables={}
 	if model!=null:variables=model.get('ModelValues')
 	if variables==null:variables={}
@@ -30,7 +30,7 @@ func load_changable_variables(changed_type:int=0)->void:
 	
 	for variable in variables:
 		var variable_content=variables[variable]
-		load_variable(variable_content,variable,changed_type==1)
+		load_variable(variable_content,variable,changed_type==0)
 	
 	
 

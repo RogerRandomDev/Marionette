@@ -1,0 +1,235 @@
+[gd_scene load_steps=20 format=3 uid="uid://dqpyooqoh5ivm"]
+
+[ext_resource type="Script" path="res://Utils/VRMModelBase.gd" id="1_eg52q"]
+[ext_resource type="PackedScene" uid="uid://cf7tffjqoleo3" path="res://vrm_samples/Godette_vrm_v4.vrm" id="2_y66we"]
+[ext_resource type="Script" path="res://addons/vrm/vrm_collider.gd" id="3_jra7e"]
+[ext_resource type="Script" path="res://addons/vrm/vrm_collider_group.gd" id="4_j6hoc"]
+[ext_resource type="Script" path="res://addons/vrm/vrm_spring_bone.gd" id="5_fl53u"]
+
+[sub_resource type="Resource" id="Resource_ot2ce"]
+resource_name = "Head"
+script = ExtResource("3_jra7e")
+node_path = NodePath("")
+bone = "Head"
+offset = Vector3(-1.13273e-09, 0.2, 6.70552e-08)
+tail = Vector3(-1.13273e-09, 0.2, 6.70552e-08)
+radius = 0.15
+is_capsule = false
+gizmo_color = Color(1, 0, 1, 1)
+
+[sub_resource type="Resource" id="Resource_k51kg"]
+resource_name = "Head"
+script = ExtResource("3_jra7e")
+node_path = NodePath("")
+bone = "Head"
+offset = Vector3(-1.59839e-09, 1.31, 0.0700001)
+tail = Vector3(-1.59839e-09, 1.31, 0.0700001)
+radius = 1.0
+is_capsule = false
+gizmo_color = Color(1, 0, 1, 1)
+
+[sub_resource type="Resource" id="Resource_me1ak"]
+script = ExtResource("4_j6hoc")
+colliders = Array[ExtResource("3_jra7e")]([SubResource("Resource_ot2ce"), SubResource("Resource_k51kg")])
+
+[sub_resource type="Resource" id="Resource_q3aa1"]
+resource_name = "FrontHair_Center_L"
+script = ExtResource("5_fl53u")
+comment = ""
+joint_nodes = PackedStringArray("FrontHair_Center_L", "FrontHair_Center_L_End", "")
+stiffness_scale = 2.5
+drag_force_scale = 0.4
+hit_radius_scale = 0.02
+gravity_scale = 0.0
+gravity_dir_default = Vector3(0, -1, 0)
+collider_groups = Array[ExtResource("4_j6hoc")]([SubResource("Resource_me1ak")])
+stiffness_force = PackedFloat64Array()
+gravity_power = PackedFloat64Array()
+gravity_dir = PackedVector3Array()
+drag_force = PackedFloat64Array()
+hit_radius = PackedFloat64Array()
+center_bone = ""
+center_node = NodePath("")
+
+[sub_resource type="Resource" id="Resource_2dc3f"]
+resource_name = "FrontHair_Center_R"
+script = ExtResource("5_fl53u")
+comment = ""
+joint_nodes = PackedStringArray("FrontHair_Center_R", "FrontHair_Center_R_End", "")
+stiffness_scale = 2.5
+drag_force_scale = 0.4
+hit_radius_scale = 0.02
+gravity_scale = 0.0
+gravity_dir_default = Vector3(0, -1, 0)
+collider_groups = Array[ExtResource("4_j6hoc")]([SubResource("Resource_me1ak")])
+stiffness_force = PackedFloat64Array()
+gravity_power = PackedFloat64Array()
+gravity_dir = PackedVector3Array()
+drag_force = PackedFloat64Array()
+hit_radius = PackedFloat64Array()
+center_bone = ""
+center_node = NodePath("")
+
+[sub_resource type="Resource" id="Resource_uejt4"]
+resource_name = "FrontHair_R"
+script = ExtResource("5_fl53u")
+comment = ""
+joint_nodes = PackedStringArray("FrontHair_R", "FrontHair_R_End", "")
+stiffness_scale = 2.5
+drag_force_scale = 0.4
+hit_radius_scale = 0.02
+gravity_scale = 0.0
+gravity_dir_default = Vector3(0, -1, 0)
+collider_groups = Array[ExtResource("4_j6hoc")]([SubResource("Resource_me1ak")])
+stiffness_force = PackedFloat64Array()
+gravity_power = PackedFloat64Array()
+gravity_dir = PackedVector3Array()
+drag_force = PackedFloat64Array()
+hit_radius = PackedFloat64Array()
+center_bone = ""
+center_node = NodePath("")
+
+[sub_resource type="Resource" id="Resource_2m2rs"]
+resource_name = "FrontHair_L"
+script = ExtResource("5_fl53u")
+comment = ""
+joint_nodes = PackedStringArray("FrontHair_L", "FrontHair_L_End", "")
+stiffness_scale = 2.5
+drag_force_scale = 0.4
+hit_radius_scale = 0.02
+gravity_scale = 0.0
+gravity_dir_default = Vector3(0, -1, 0)
+collider_groups = Array[ExtResource("4_j6hoc")]([SubResource("Resource_me1ak")])
+stiffness_force = PackedFloat64Array()
+gravity_power = PackedFloat64Array()
+gravity_dir = PackedVector3Array()
+drag_force = PackedFloat64Array()
+hit_radius = PackedFloat64Array()
+center_bone = ""
+center_node = NodePath("")
+
+[sub_resource type="Resource" id="Resource_qlvnf"]
+resource_name = "Chest"
+script = ExtResource("3_jra7e")
+node_path = NodePath("")
+bone = "Chest"
+offset = Vector3(-1.60712e-10, 0.0600001, -0.04)
+tail = Vector3(-1.60712e-10, 0.0600001, -0.04)
+radius = 0.1
+is_capsule = false
+gizmo_color = Color(1, 0, 1, 1)
+
+[sub_resource type="Resource" id="Resource_tubsb"]
+resource_name = "Chest"
+script = ExtResource("3_jra7e")
+node_path = NodePath("")
+bone = "Chest"
+offset = Vector3(7.21188e-11, 0.34, 0.04)
+tail = Vector3(7.21188e-11, 0.34, 0.04)
+radius = 0.217
+is_capsule = false
+gizmo_color = Color(1, 0, 1, 1)
+
+[sub_resource type="Resource" id="Resource_ol6ix"]
+script = ExtResource("4_j6hoc")
+colliders = Array[ExtResource("3_jra7e")]([SubResource("Resource_qlvnf"), SubResource("Resource_tubsb")])
+
+[sub_resource type="Resource" id="Resource_3tli3"]
+resource_name = "Ribbon"
+script = ExtResource("5_fl53u")
+comment = ""
+joint_nodes = PackedStringArray("Ribbon", "Ribbon_end", "")
+stiffness_scale = 2.0
+drag_force_scale = 0.4
+hit_radius_scale = 0.02
+gravity_scale = 0.0
+gravity_dir_default = Vector3(0, -1, 0)
+collider_groups = Array[ExtResource("4_j6hoc")]([SubResource("Resource_ol6ix")])
+stiffness_force = PackedFloat64Array()
+gravity_power = PackedFloat64Array()
+gravity_dir = PackedVector3Array()
+drag_force = PackedFloat64Array()
+hit_radius = PackedFloat64Array()
+center_bone = ""
+center_node = NodePath("")
+
+[sub_resource type="Resource" id="Resource_d2fya"]
+resource_name = "HairBall_L"
+script = ExtResource("5_fl53u")
+comment = ""
+joint_nodes = PackedStringArray("HairBall_L", "HairBall_L_End", "")
+stiffness_scale = 4.0
+drag_force_scale = 0.1
+hit_radius_scale = 0.02
+gravity_scale = 0.0
+gravity_dir_default = Vector3(0, -1, 0)
+collider_groups = Array[ExtResource("4_j6hoc")]([])
+stiffness_force = PackedFloat64Array()
+gravity_power = PackedFloat64Array()
+gravity_dir = PackedVector3Array()
+drag_force = PackedFloat64Array()
+hit_radius = PackedFloat64Array()
+center_bone = ""
+center_node = NodePath("")
+
+[sub_resource type="Resource" id="Resource_3fbi0"]
+resource_name = "HairBall_R"
+script = ExtResource("5_fl53u")
+comment = ""
+joint_nodes = PackedStringArray("HairBall_R", "HairBall_R_End", "")
+stiffness_scale = 4.0
+drag_force_scale = 0.1
+hit_radius_scale = 0.02
+gravity_scale = 0.0
+gravity_dir_default = Vector3(0, -1, 0)
+collider_groups = Array[ExtResource("4_j6hoc")]([])
+stiffness_force = PackedFloat64Array()
+gravity_power = PackedFloat64Array()
+gravity_dir = PackedVector3Array()
+drag_force = PackedFloat64Array()
+hit_radius = PackedFloat64Array()
+center_bone = ""
+center_node = NodePath("")
+
+[sub_resource type="Resource" id="Resource_wimrp"]
+resource_name = "HairBall_Center"
+script = ExtResource("5_fl53u")
+comment = ""
+joint_nodes = PackedStringArray("HairBall_Center", "HairBall_Center_End", "")
+stiffness_scale = 4.0
+drag_force_scale = 0.1
+hit_radius_scale = 0.02
+gravity_scale = 0.0
+gravity_dir_default = Vector3(0, -1, 0)
+collider_groups = Array[ExtResource("4_j6hoc")]([])
+stiffness_force = PackedFloat64Array()
+gravity_power = PackedFloat64Array()
+gravity_dir = PackedVector3Array()
+drag_force = PackedFloat64Array()
+hit_radius = PackedFloat64Array()
+center_bone = ""
+center_node = NodePath("")
+
+[node name="Model" type="Node3D"]
+script = ExtResource("1_eg52q")
+
+[node name="Godette_vrm_v4" parent="." node_paths=PackedStringArray("default_springbone_center") instance=ExtResource("2_y66we")]
+disable_colliders = true
+default_springbone_center = NodePath("GeneralSkeleton/Face")
+spring_bones = Array[ExtResource("5_fl53u")]([SubResource("Resource_q3aa1"), SubResource("Resource_2dc3f"), SubResource("Resource_uejt4"), SubResource("Resource_2m2rs"), SubResource("Resource_3tli3"), SubResource("Resource_d2fya"), SubResource("Resource_3fbi0"), SubResource("Resource_wimrp")])
+collider_groups = Array[ExtResource("4_j6hoc")]([SubResource("Resource_me1ak"), SubResource("Resource_ol6ix")])
+collider_library = Array[ExtResource("3_jra7e")]([SubResource("Resource_ot2ce"), SubResource("Resource_k51kg"), SubResource("Resource_qlvnf"), SubResource("Resource_tubsb")])
+
+[node name="GeneralSkeleton" parent="Godette_vrm_v4" index="0"]
+bones/5/rotation = Quaternion(0.018475, 0.000474975, 0.000474975, 0.999475)
+
+[node name="Head" parent="Godette_vrm_v4/GeneralSkeleton" index="4"]
+transform = Transform3D(0.999999, -0.000932561, 0.000967687, 0.000967687, 0.999316, -0.0369563, -0.000932561, 0.0369572, 0.999316, 3.34462e-09, 0.983713, 0.0197261)
+
+[node name="secondary" parent="Godette_vrm_v4" index="1" node_paths=PackedStringArray("default_springbone_center")]
+disable_colliders = true
+default_springbone_center = NodePath("../GeneralSkeleton/Face")
+collider_groups = Array[ExtResource("4_j6hoc")]([SubResource("Resource_me1ak"), SubResource("Resource_ol6ix")])
+collider_library = Array[ExtResource("3_jra7e")]([SubResource("Resource_ot2ce"), SubResource("Resource_k51kg"), SubResource("Resource_qlvnf"), SubResource("Resource_tubsb")])
+
+[editable path="Godette_vrm_v4"]

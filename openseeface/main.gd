@@ -2,6 +2,9 @@ extends Window
 
 # TODO (Tim Yuen) Godot still can't infer types correctly, so they have to be casted
 
+@onready var FaceHandler=$OpenSeeFaceHandler
+
+
 ## Redundant keys for quick access
 const OSF_OPTIONS := {
 	"IP": {
@@ -209,6 +212,9 @@ var _osf_options := %OsfOptions as VBoxContainer
 func _ready() -> void:
 	join_tracker()
 	_config = _read_config()
+	#loads into globals the face handler
+	Globals.FaceHandler=$OpenSeeFaceHandler
+	
 	
 	_is_windows = OS.get_name().to_lower() == "windows"
 	

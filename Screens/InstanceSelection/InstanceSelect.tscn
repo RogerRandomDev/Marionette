@@ -1,0 +1,71 @@
+[gd_scene load_steps=2 format=3 uid="uid://cu0pib1cgjte8"]
+
+[ext_resource type="Script" path="res://Screens/InstanceSelection/InstanceSelect.gd" id="1_17g43"]
+
+[node name="InstanceSelect" type="PanelContainer"]
+clip_contents = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_17g43")
+
+[node name="HBoxContainer" type="HSplitContainer" parent="."]
+layout_mode = 2
+
+[node name="InstanceListStuff" type="VBoxContainer" parent="HBoxContainer"]
+z_index = 1
+custom_minimum_size = Vector2(256, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="InstanceList" type="Tree" parent="HBoxContainer/InstanceListStuff"]
+unique_name_in_owner = true
+clip_contents = false
+layout_mode = 2
+size_flags_vertical = 3
+allow_search = false
+hide_folding = true
+enable_recursive_folding = false
+hide_root = true
+scroll_horizontal_enabled = false
+
+[node name="CreateInstance" type="Button" parent="HBoxContainer/InstanceListStuff"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Create Instance"
+
+[node name="DeleteInstance" type="Button" parent="HBoxContainer/InstanceListStuff"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Delete Instance"
+
+[node name="ConfirmDeleteInstance" type="ConfirmationDialog" parent="HBoxContainer/InstanceListStuff"]
+unique_name_in_owner = true
+dialog_text = "Are you sure you want to delete this instance? it cannot be undone."
+
+[node name="InstancePreview" type="VBoxContainer" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.5
+alignment = 2
+
+[node name="InstancePreviewTex" type="TextureRect" parent="HBoxContainer/InstancePreview"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/InstancePreview"]
+layout_mode = 2
+
+[node name="LaunchInstance" type="Button" parent="HBoxContainer/InstancePreview/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+text = "Launch Instance"

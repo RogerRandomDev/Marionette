@@ -6,6 +6,7 @@ signal new_model_loaded(model:Node3D)
 func _ready():
 	var tree:Tree=$ScrollContainer/PanelContainer/HBox/Tree
 	var headbonecheckbox=$ScrollContainer/PanelContainer/HBox/VBoxContainer/HBoxContainer/HeadBoneCheckBox
+	var eyebonecheckbox=$ScrollContainer/PanelContainer/HBox/VBoxContainer/HBoxContainer2/EyeBoneCheckBox
 	var resetskeletonbutton=$ScrollContainer/PanelContainer/HBox/VBoxContainer/ResetSkeletonPose
 	
 	
@@ -21,6 +22,20 @@ func _ready():
 			if loaded_model.head_bone_index==selected.get_meta("bone_index",-1):
 				loaded_model.head_bone_index=-1
 		)
+	#if a bone is an eye
+	eyebonecheckbox.toggled.connect(func(pressed):
+		var loaded_model=get_tree().current_scene.world_scene.loaded_model
+		var selected=tree.get_selected()
+		if selected == null:return
+		var my_bone_index=selected.get_meta("bone_index",-1)
+		if pressed:
+			if !loaded_model.eye_bone_indices.has(my_bone_index):
+				loaded_model.eye_bone_indices.push_back(my_bone_index)
+		else:
+			if loaded_model.eye_bone_indices.has(my_bone_index):
+				loaded_model.eye_bone_indices.erase(my_bone_index)
+		)
+	
 	
 	#handles loading in the new model's skeleton
 	new_model_loaded.connect(func(model:Node3D):
@@ -60,8 +75,14 @@ func _ready():
 		)
 	tree.item_selected.connect(func():
 		var selected=tree.get_selected()
-		if selected.get_meta("bone_index",-1)<0:headbonecheckbox.button_pressed=false
-		else:headbonecheckbox.button_pressed=get_tree().current_scene.world_scene.loaded_model.head_bone_index==selected.get_meta("bone_index",-1)
+		if selected.get_meta("bone_index",-1)<0:
+			headbonecheckbox.button_pressed=false
+			eyebonecheckbox.button_pressed=false
+		else:
+			headbonecheckbox.button_pressed=get_tree().current_scene.world_scene.loaded_model.head_bone_index==selected.get_meta("bone_index",-1)
+			eyebonecheckbox.button_pressed=get_tree().current_scene.world_scene.loaded_model.eye_bone_indices.has(selected.get_meta("bone_index",-1))
+		
+		
 		)
 
 

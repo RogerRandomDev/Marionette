@@ -21,6 +21,9 @@ var window_buttons={
 
 func _ready():
 	for button in window_buttons:
+		#load the global acccess to the value
+		Globals._set(button+"InterfaceWindow",window_buttons[button])
+		
 		var btn=Button.new()
 		btn.text=button
 		%Basic.add_child(btn)

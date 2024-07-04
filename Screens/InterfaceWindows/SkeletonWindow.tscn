@@ -60,10 +60,13 @@ text = "Head Bone"
 layout_mode = 2
 size_flags_horizontal = 8
 
-[node name="Label3" type="Label" parent="ScrollContainer/PanelContainer/HBox/VBoxContainer/HBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="ScrollContainer/PanelContainer/HBox/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="ScrollContainer/PanelContainer/HBox/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
 text = "Eye Bone"
 
-[node name="EyeBoneCheckBox" type="CheckBox" parent="ScrollContainer/PanelContainer/HBox/VBoxContainer/HBoxContainer"]
+[node name="EyeBoneCheckBox" type="CheckBox" parent="ScrollContainer/PanelContainer/HBox/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 8

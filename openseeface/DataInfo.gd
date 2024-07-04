@@ -13,6 +13,11 @@ extends RefCounted
 		"target_value":-1.0,
 		"current_value":-1.0
 	},
+	"Blink":{
+		"interpolation":0.5,
+		"target_value":-1.0,
+		"current_value":-1.0
+	},
 	"EyeBrowSteepnessLeft": {
 		"interpolation":0.0,
 		"target_value":-1.0,
@@ -110,7 +115,17 @@ extends RefCounted
 		"target_value":Quaternion.from_euler(Vector3(0,0,0)),
 		"current_value":Quaternion.from_euler(Vector3(0,0,0)),
 		"calibrate":Quaternion.from_euler(Vector3.ZERO)
-	}
+	},
+	"horizontalLooking":{
+		"interpolation":0.0,
+		"target_value":0.0,
+		"current_value":0.0
+	},
+	"verticalLooking":{
+		"interpolation":0.0,
+		"target_value":0.0,
+		"current_value":0.0
+	},
 }
 
 ##FPS of the camera in use/ update rate of the face tracking
@@ -158,25 +173,6 @@ func update_info(OSF_data)->void:
 		#)
 		#features["Euler"]["current_value"]=out_val
 	
-	###
-	### EYE GAZE LEFT/RIGHT
-	###
-	var points3D=OSF_data["points3D"]
-	var rightGaze = -Basis().looking_at(points3D[66]*Vector3(-1,1,1) - points3D[68]*Vector3(-1,1,1)).get_euler();
-	var leftGaze = -Basis().looking_at(points3D[67]*Vector3(-1,1,1) - points3D[69]*Vector3(-1,1,1)).get_euler();
-	rightGaze=Quaternion.from_euler(
-			rightGaze-features["rightEyeGaze"]["calibrate"].get_euler()
-	)
-	leftGaze=Quaternion.from_euler(
-			leftGaze-features["leftEyeGaze"]["calibrate"].get_euler()
-	)
-	features["leftEyeGaze"]["target_value"]=leftGaze
-	features["rightEyeGaze"]["target_value"]=rightGaze
-	if features["leftEyeGaze"]["interpolation"]==0.0:
-		features["leftEyeGaze"]["current_value"]=leftGaze
-	if features["rightEyeGaze"]["interpolation"]==0.0:
-		features["rightEyeGaze"]["current_value"]=rightGaze
-	
 	
 	###
 	### QUATERNION/HEAD FACE DIRECTION
@@ -204,6 +200,49 @@ func update_info(OSF_data)->void:
 		features["leftEyeOpen"]["current_value"]=eye_open[0]
 	if features["rightEyeOpen"]["interpolation"]==0.0:
 		features["rightEyeOpen"]["current_value"]=eye_open[1]
+	var is_blinking=(eye_open[0]<0.2 and eye_open[1]<0.2)
+	features["Blink"]["target_value"]=float(is_blinking)
+	if features["Blink"]["interpolation"]==0.0:
+		features["Blink"]["current_value"]=float(is_blinking)
+	
+	
+	###
+	### EYE GAZE LEFT/RIGHT
+	###
+	### IF BLINKING, IT WON'T UPDATE TO PREVENT EYES BEING JUMPY
+	if !is_blinking:
+		var points3D=OSF_data["points3D"]
+		var rightGaze = -Basis().looking_at(points3D[66]*Vector3(-1,1,1) - points3D[68]*Vector3(-1,1,1)).get_euler();
+		var leftGaze = -Basis().looking_at(points3D[67]*Vector3(-1,1,1) - points3D[69]*Vector3(-1,1,1)).get_euler();
+		rightGaze=Quaternion.from_euler(
+				rightGaze-features["rightEyeGaze"]["calibrate"].get_euler()
+		)
+		leftGaze=Quaternion.from_euler(
+				leftGaze-features["leftEyeGaze"]["calibrate"].get_euler()
+		)
+		features["leftEyeGaze"]["target_value"]=leftGaze
+		features["rightEyeGaze"]["target_value"]=rightGaze
+		if features["leftEyeGaze"]["interpolation"]==0.0:
+			features["leftEyeGaze"]["current_value"]=leftGaze
+		if features["rightEyeGaze"]["interpolation"]==0.0:
+			features["rightEyeGaze"]["current_value"]=rightGaze
+		
+		var gaze_average=(leftGaze.get_euler()+rightGaze.get_euler())*0.5
+		var gaze_direction=Vector2(gaze_average.y*0.31831,gaze_average.x*0.31831)
+		
+		features["horizontalLooking"]["target_value"]=gaze_direction.x
+		features["verticalLooking"]["target_value"]=gaze_direction.y
+		if features["horizontalLooking"]["interpolation"]==0.0:
+			features["horizontalLooking"]["current_value"]=gaze_direction.x
+		if features["verticalLooking"]["interpolation"]==0.0:
+			features["verticalLooking"]["current_value"]=gaze_direction.y
+		
+		
+		
+	
+	
+	
+	
 	
 	###
 	### TRANSLATION/HEAD POSITION
@@ -300,6 +339,7 @@ func get_storage_dictionary()->Dictionary:
 	return output
 func load_storage_dictionary(input:Dictionary)->void:
 	for value in input:
+		if not features.has(value):continue
 		if features[value].has("calibrate"):
 			features[value]["calibrate"]=input[value]["calibrate"]
 		features[value]["interpolation"]=input[value]["interpolation"]

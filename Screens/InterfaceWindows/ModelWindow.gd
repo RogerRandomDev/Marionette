@@ -36,8 +36,7 @@ var camera_controls:Array=[
 		"text":"Reset Camera Position",
 		"func":(
 			func():
-				var world=get_tree().current_scene.world_scene
-				var cam=world.get_node("SubViewport/Camera3D")
+				var cam=Globals.world.get_node("SubViewport/Camera3D")
 				cam.position=Vector3(0.0,0.5,cam.position.z)
 )
 	},
@@ -46,8 +45,7 @@ var camera_controls:Array=[
 		"text":"Reset Camera Rotation",
 		"func":(
 			func():
-				var world=get_tree().current_scene.world_scene
-				var model=world.get_node_or_null("SubViewport/MODEL")
+				var model=Globals.world.get_node_or_null("SubViewport/MODEL")
 				if model:model.rotation=Vector3.ZERO
 )
 	},
@@ -56,8 +54,7 @@ var camera_controls:Array=[
 		"text":"Reset Camera Zoom",
 		"func":(
 			func():
-				var world=get_tree().current_scene.world_scene
-				var cam=world.get_node("SubViewport/Camera3D")
+				var cam=Globals.world.get_node("SubViewport/Camera3D")
 				cam.position.z=1.0
 )
 	}
@@ -79,7 +76,7 @@ var model_controls:Array=[
 	{
 		"type":"Interpolation",
 		"Name":"GazeInterp",
-		"controlled_value":"leftEyeGaze,rightEyeGaze",
+		"controlled_value":"leftEyeGaze,rightEyeGaze,horizontalLooking,verticalLooking",
 		"text":"Gaze Interpolation",
 		"range":Vector2(0,1),
 		"forceDefaultIfFalse":"GazeTracked",
@@ -118,19 +115,19 @@ var model_controls:Array=[
 	{
 		"type":"Function",
 		"text":"Calibrate Gaze",
-		"func":func():OSF_LOAD.get_node("OpenSeeFaceHandler")._dataInfo.calibrateFeatures(["leftEyeGaze","rightEyeGaze"]),
+		"func":func():Globals.FaceHandler._dataInfo.calibrateFeatures(["leftEyeGaze","rightEyeGaze"]),
 		"align":1
 	},
 	{
 		"type":"Function",
 		"text":"Calibrate Facing Direction",
-		"func":func():OSF_LOAD.get_node("OpenSeeFaceHandler")._dataInfo.calibrateFeatures(["Quaternion","Euler"]),
+		"func":func():Globals.FaceHandler._dataInfo.calibrateFeatures(["Quaternion","Euler"]),
 		"align":1
 	},
 	{
 		"type":"Function",
 		"text":"Calibrate Head Position",
-		"func":func():OSF_LOAD.get_node("OpenSeeFaceHandler")._dataInfo.calibrateFeature("Translation"),
+		"func":func():Globals.FaceHandler._dataInfo.calibrateFeature("Translation"),
 		"align":1
 		
 	}
@@ -139,11 +136,10 @@ var model_controls:Array=[
 
 func _ready():
 	#gives time to load OSFData from the config
-	await get_tree().process_frame
-	connect_controls()
+	connect_controls.call_deferred()
 
 func connect_controls():
-	var OSF_config=OSF_LOAD.get_node("OpenSeeFaceHandler")._dataInfo.features
+	var OSF_config=Globals.FaceHandler._dataInfo.features
 	var all_controls=camera_controls.duplicate()
 	all_controls.append_array(model_controls)
 	for control in all_controls:
@@ -170,7 +166,7 @@ func connect_controls():
 				if control.has("toggle_on_node"):
 					edit.toggled.connect(
 						func(is_pressed):
-							var on_node=get_tree().current_scene.world_scene
+							var on_node=Globals.world
 							if control["toggle_on_node"]!="./":on_node=on_node.get_node(control["toggle_on_node"])
 							on_node.set(control["toggle_property"],is_pressed)
 					)
@@ -238,15 +234,68 @@ func connect_controls():
 	%ChooseNewModel.close_requested.connect(func():%ChooseNewModel.hide())
 	%ChooseNewModel.file_selected.connect(
 		func(file_path):
-			var world=get_tree().current_scene.world_scene
+
+			var new_file_path=file_path+"/Model.tscn"
+			var old_file_path=chosen_model
 			chosen_model=file_path
-			file_path=file_path+"/Model.tscn"
+			store_current_loaded_model(old_file_path)
+			ShapeBinds.clear_binds()
+			await Globals.world.load_model(load(new_file_path).instantiate(),old_file_path)
 			
-			world.load_model(load(file_path).instantiate())
+			load_model_config()
+			
+			
 	)
 	visibility_changed.connect(func():self.size=Vector2(320,360))
 	
 	
-	await get_tree().process_frame
+	#await get_tree().process_frame
 	if chosen_model!="":%ChooseNewModel.file_selected.emit(chosen_model)
+
+
+func load_model_config()->void:
+	var config_path=chosen_model.replace("res://","user://")+".conf"
+	var model=Globals.world.loaded_model
 	
+	if FileAccess.file_exists(config_path):
+		var file=FileAccess.open(config_path,FileAccess.READ)
+		var model_config=file.get_var(true)
+		file.close()
+		#re-add the binds on the model for shapekeys
+		ShapeBinds.clear_binds()
+		for shape_bind in model_config.ModelShapeKeyBinds:
+			if len(shape_bind)<6 or String(shape_bind[5])=="":continue
+			var mesh=model.get_node(String(shape_bind[5]))
+			ShapeBinds.create_bind(
+				mesh,
+				shape_bind[0],
+				shape_bind[1],
+				shape_bind[2],
+				shape_bind[3],
+				shape_bind[4],
+				Globals.FaceHandler._dataInfo.features[shape_bind[6]],
+				shape_bind[6]
+				)
+		model.head_bone_index=model_config.ModelSkeletonBoneData.HeadBone
+		model.eye_bone_indices=model_config.ModelSkeletonBoneData.EyeBones
+	Globals.ShapeKeysInterfaceWindow.load_new_model_shapekeys.emit(model)
+
+
+##stores config data for the current loaded model
+func store_current_loaded_model(file_path:String="")->void:
+	if Globals.world.loaded_model==null:return
+	var model_config=get_store_data()
+	var file=FileAccess.open(file_path.replace("res://","user://")+".conf",FileAccess.WRITE)
+	file.store_var(model_config,true)
+	file.close()
+
+
+func get_store_data()->Dictionary:
+	var model_config={
+		"ModelShapeKeyBinds":ShapeBinds.get_config_format(Globals.world.loaded_model),
+		"ModelSkeletonBoneData":{
+			"HeadBone":Globals.world.loaded_model.head_bone_index,
+			"EyeBones":Globals.world.loaded_model.eye_bone_indices
+		}
+	}
+	return model_config

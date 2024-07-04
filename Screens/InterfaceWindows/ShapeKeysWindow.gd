@@ -37,11 +37,16 @@ func _ready()->void:
 					for blend_shape in list:
 						var shape_name=blend_shape.trim_prefix("blend_shapes/")
 						var key_item=child_item.create_child()
+						var index=child.find_blend_shape_by_name(shape_name)
 						key_item.set_text(0,shape_name)
 						key_item.set_meta("is_shapekey",true)
 						key_item.set_meta("on_instance",child)
 						key_item.set_meta("selected_feature_index",0)
-						key_item.set_meta("index",child.find_blend_shape_by_name(shape_name))
+						var possible_binds=ShapeBinds.shapekeyBinds.filter(func(v):return v.on_mesh==child and v.key_id==index)
+						if len(possible_binds):
+							key_item.set_meta("bind",possible_binds[0])
+							key_item.set_meta("selected_feature_index",Globals.FaceHandler._dataInfo.features.keys().find(possible_binds[0].feature_name)+1)
+						key_item.set_meta("index",index)
 				#loop time
 				recursive_func.call(child,recursive_func)
 			)
@@ -58,7 +63,19 @@ func _ready()->void:
 	
 	
 	(shapekey_tree as Tree).item_selected.connect(func():
+		feature_max.apply()
+		feature_min.apply()
+		feature_offset.apply()
+		feature_scale.apply()
+		
+		#behold once more, my absolutely horendous technique
+		#if it takes a frame or two to do something
+		#wait a frame or two to continue
+		await get_tree().process_frame
+		#await get_tree().process_frame
+		
 		var selected=shapekey_tree.get_selected()
+		
 		if not selected.get_meta("is_shapekey",false):
 			shapekey_tree.nothing_selected.emit()
 			return
@@ -79,6 +96,7 @@ func _ready()->void:
 			feature_offset.value=0
 			feature_scale.value=1
 			feature_current.show()
+			
 		feature_name_option.select(selected.get_meta("selected_feature_index",0))
 		)
 	
@@ -97,7 +115,10 @@ func _ready()->void:
 		if instance==null or not selected.get_meta("is_shapekey"):return
 		
 		var item_name=(feature_name_option as OptionButton).get_item_text(index)
-		if item_name=="None":ShapeBinds.removeBind(selected.get_meta("bind",null))
+		if item_name=="None":
+			ShapeBinds.removeBind(selected.get_meta("bind",null))
+			selected.remove_meta("bind");selected.set_meta("selected_feature_index",0)
+			feature_current.show()
 		else:
 			var old_bind=null if not selected.has_meta("bind") else selected.get_meta("bind",null)
 			if old_bind==null:
@@ -108,9 +129,13 @@ func _ready()->void:
 					feature_offset.value,
 					feature_min.value,
 					feature_max.value,
-					OSF_LOAD.get_node("OpenSeeFaceHandler")._dataInfo.features[item_name]
+					Globals.FaceHandler._dataInfo.features[item_name],
+					item_name
 				))
-			else:old_bind.feature_linked=OSF_LOAD.get_node("OpenSeeFaceHandler")._dataInfo.features[item_name]
+			else:
+				old_bind.feature_name=item_name
+				old_bind.feature_linked=Globals.FaceHandler._dataInfo.features.values()[index-1]
+			feature_current.hide()
 			selected.set_meta("selected_feature_index",index)
 	)
 	
@@ -122,7 +147,6 @@ func _ready()->void:
 		if old_bind==null:return
 		old_bind.offset_feature=new_value
 		)
-	
 	feature_scale.value_changed.connect(func(new_value):
 		var selected=shapekey_tree.get_selected()
 		var instance=selected.get_meta("on_instance",null)
@@ -148,8 +172,7 @@ func _ready()->void:
 		if old_bind==null:return
 		old_bind.feature_max=new_value
 		)
-	
-	
+	load_feature_names(Globals.FaceHandler._dataInfo.features.keys())
 	
 
 

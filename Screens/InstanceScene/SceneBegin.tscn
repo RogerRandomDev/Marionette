@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://nketb5eusg70"]
 
-[ext_resource type="Script" path="res://Screens/SceneBegin.gd" id="1_u54dw"]
+[ext_resource type="Script" path="res://Screens/InstanceScene/SceneBegin.gd" id="1_u54dw"]
 
 [node name="SceneBegin" type="Control"]
 layout_mode = 3
