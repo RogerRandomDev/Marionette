@@ -172,6 +172,7 @@ func _ready()->void:
 		if old_bind==null:return
 		old_bind.feature_max=new_value
 		)
+	
 	load_feature_names(Globals.FaceHandler._dataInfo.features.keys())
 	
 

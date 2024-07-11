@@ -387,4 +387,7 @@ var udp_socket := PacketPeerUDP.new()
 
 func join_tracker():
 	$OpenSeeFaceHandler.startServer()
-	
+
+
+
+func BuildDataInfo():return load("res://openseeface/DataInfo.gd").new()

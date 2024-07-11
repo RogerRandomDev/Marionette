@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "f7rqFm2aPTMzyzzqTIZCDmOyXSnf/SWOjq9fVOMuq9zEpVyCjWgAgl+3osAnYgNT80wbO5RWOYO+uNiJfyFiTA==",
+  "success": true,
+  "projectFilePath": "/home/roger/Marionette/Marionette.csproj",
+  "expectedPackageFiles": [
+    "/home/roger/.nuget/packages/godot.sourcegenerators/4.2.2/godot.sourcegenerators.4.2.2.nupkg.sha512",
+    "/home/roger/.nuget/packages/godotsharp/4.2.2/godotsharp.4.2.2.nupkg.sha512",
+    "/home/roger/.nuget/packages/godotsharpeditor/4.2.2/godotsharpeditor.4.2.2.nupkg.sha512",
+    "/home/roger/.nuget/packages/microsoft.netcore.app.ref/6.0.30/microsoft.netcore.app.ref.6.0.30.nupkg.sha512",
+    "/home/roger/.nuget/packages/microsoft.aspnetcore.app.ref/6.0.30/microsoft.aspnetcore.app.ref.6.0.30.nupkg.sha512"
+  ],
+  "logs": []
+}

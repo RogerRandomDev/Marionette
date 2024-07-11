@@ -1,0 +1,17 @@
+/home/roger/Marionette/.godot/mono/temp/obj/Debug/Marionette.csproj.AssemblyReference.cache
+/home/roger/Marionette/.godot/mono/temp/obj/Debug/Marionette.GeneratedMSBuildEditorConfig.editorconfig
+/home/roger/Marionette/.godot/mono/temp/obj/Debug/Marionette.AssemblyInfoInputs.cache
+/home/roger/Marionette/.godot/mono/temp/obj/Debug/Marionette.AssemblyInfo.cs
+/home/roger/Marionette/.godot/mono/temp/obj/Debug/Marionette.csproj.CoreCompileInputs.cache
+/home/roger/Marionette/.godot/mono/temp/bin/Debug/Marionette.deps.json
+/home/roger/Marionette/.godot/mono/temp/bin/Debug/Marionette.runtimeconfig.json
+/home/roger/Marionette/.godot/mono/temp/bin/Debug/Marionette.dll
+/home/roger/Marionette/.godot/mono/temp/bin/Debug/Marionette.pdb
+/home/roger/Marionette/.godot/mono/temp/bin/Debug/GodotSharp.dll
+/home/roger/Marionette/.godot/mono/temp/bin/Debug/GodotSharpEditor.dll
+/home/roger/Marionette/.godot/mono/temp/obj/Debug/Marionette.csproj.CopyComplete
+/home/roger/Marionette/.godot/mono/temp/obj/Debug/Marionette.dll
+/home/roger/Marionette/.godot/mono/temp/obj/Debug/refint/Marionette.dll
+/home/roger/Marionette/.godot/mono/temp/obj/Debug/Marionette.pdb
+/home/roger/Marionette/.godot/mono/temp/obj/Debug/Marionette.genruntimeconfig.cache
+/home/roger/Marionette/.godot/mono/temp/obj/Debug/ref/Marionette.dll

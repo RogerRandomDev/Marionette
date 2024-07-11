@@ -50,6 +50,7 @@ func _eyebrows_update(data:Dictionary)->void:
 func _head_update(data:Dictionary)->void:pass
 
 func _head_rotation_update(quaternion_data:Quaternion)->void:
+	
 	if head_bone_index==-1||model_skeleton==null:return
 	
 	var head_rotation=(-quaternion_data).get_euler()

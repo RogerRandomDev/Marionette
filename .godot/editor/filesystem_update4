@@ -1,2 +1,5 @@
 res://Environment.tres
+res://openseeface/main.tscn
 res://Screens/InstanceSelection/InstanceSelect.tscn
+res://Screens/InterfaceWindows/ShapeKeysWindow.gd
+res://openseeface/OSFHandler.cs

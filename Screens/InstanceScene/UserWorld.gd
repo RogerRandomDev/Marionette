@@ -15,7 +15,8 @@ func _ready():
 func load_OSF()->void:
 	var data_ref=Globals.FaceHandler._dataInfo
 	last_ref=data_ref
-	if data_ref!=null:data_ref.info_updated.connect(get_node("SubViewport/MODEL")._model_update)
+	if data_ref!=null:data_ref.bindEvent(get_node("SubViewport/MODEL")._model_update)
+	#if data_ref!=null:data_ref.info_updated.connect(get_node("SubViewport/MODEL")._model_update)
 
 
 func load_model(model:Node,old_path:String="")->void:

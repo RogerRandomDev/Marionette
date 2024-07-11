@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bwgrkmrulsuqs"]
+
+[ext_resource type="Script" path="res://live2D/Live2DImport.gd" id="1_wveyo"]
+
+[node name="Testing" type="Node"]
+script = ExtResource("1_wveyo")

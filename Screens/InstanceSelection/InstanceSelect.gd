@@ -13,7 +13,16 @@ func _ready():
 		for child in root_instance_item.get_children():child.set_editable(0,false)
 		var selected=%InstanceList.get_selected()
 		selected.set_editable.call_deferred(0,true)
-		%InstancePreviewTex.texture=selected.get_icon(0)
+		#honestly not needed but i wanted it to look nicer
+		#so i upscale manually from here
+		var icon=selected.get_icon(0) as ImageTexture
+		var img=icon.get_image()
+		var s=img.get_size()
+		var viewport_size=get_viewport_rect().size
+		var scaled_img=max(viewport_size.x/s.x,viewport_size.y/s.y)
+		img.resize(s.x*scaled_img,s.y*scaled_img,Image.INTERPOLATE_LANCZOS)
+		%InstancePreviewTex.texture=ImageTexture.create_from_image(img)
+		
 		)
 	
 	%InstanceList.item_edited.connect(func():
@@ -106,5 +115,4 @@ func load_instance_list()->void:
 		%InstanceList.resized.connect(func():
 			new_item.set_icon_max_width(0,min(%InstanceList.size.x*0.5,256))
 			)
-		
 		

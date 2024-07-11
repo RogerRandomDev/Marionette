@@ -56,6 +56,7 @@ alignment = 2
 
 [node name="InstancePreviewTex" type="TextureRect" parent="HBoxContainer/InstancePreview"]
 unique_name_in_owner = true
+texture_filter = 1
 layout_mode = 2
 size_flags_vertical = 3
 expand_mode = 1

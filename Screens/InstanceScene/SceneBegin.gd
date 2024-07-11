@@ -53,6 +53,7 @@ func _exit_tree():
 	var screen_data=get_viewport().get_texture().get_image()
 	var screen_size=get_viewport().size
 	var screen_ratio=512.0/max(screen_size.x,screen_size.y)
+	screen_ratio=min(1,screen_ratio)
 	screen_size=Vector2i(screen_size*screen_ratio)
 	
 	screen_data.resize(screen_size.x,screen_size.y,Image.INTERPOLATE_LANCZOS)

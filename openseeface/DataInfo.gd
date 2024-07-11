@@ -1,5 +1,5 @@
 extends RefCounted
-
+class_name OSFDataInfo
 
 
 @export var features:Dictionary={
@@ -133,6 +133,8 @@ extends RefCounted
 ##emitted whenever update_info is run
 signal info_updated(new_info)
 
+var OSF_data:Dictionary={}
+
 #func _init(on_obj):
 	#create_signals.call_deferred(on_obj)
 #func create_signals(on_obj)->void:
@@ -140,8 +142,7 @@ signal info_updated(new_info)
 		#feature_signals[feature]=Signal(on_obj,StringName("%sUpdated"%feature))
 	
 
-func update_info(OSF_data)->void:
-	
+func update_info()->void:
 	###
 	### REGULAR FEATURES
 	### 
@@ -149,7 +150,7 @@ func update_info(OSF_data)->void:
 		features[feature]["target_value"]=OSF_data["features"][feature]
 		if features[feature]["interpolation"]==0.0:
 			features[feature]["current_value"]=OSF_data["features"][feature]
-	
+	#print(OSF_data["euler"])
 	###
 	### EULER/HEAD FACE DIRECTION
 	###
@@ -327,6 +328,7 @@ func calibrate()->void:
 	features["rightEyeGaze"]["calibrate"]=Quaternion.from_euler(
 		cali.get_euler()+target.get_euler()
 	)
+	
 
 
 func get_storage_dictionary()->Dictionary:
@@ -363,3 +365,9 @@ func calibrateFeature(feature:String)->void:
 
 func calibrateFeatures(feature_names:Array)->void:
 	for feature_name in feature_names:calibrateFeature(feature_name)
+
+
+func ConnectInfoToSignal(onObject):
+	onObject.onDataPackage.connect(update_info)
+	
+	OSF_data=onObject.getPackage();

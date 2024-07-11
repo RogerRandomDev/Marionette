@@ -4,20 +4,12 @@ class_name OpenSeeFaceHandler
 @export var listenPort: int = 11572
 @export var listenHost: String = "127.0.0.1"
 @export var points = 68
-@export var started = false:
-	set=_onStarted
+@export var started = false
 var udpServerComponent: UDPServer
-var _isStarted = false
 var _dataInfo
 
 
 signal onDataPackage
-
-func _onStarted(_newVal):
-	if _isStarted == false:
-		started = false
-	else:
-		started = true
 
 
 func startServer():
@@ -27,7 +19,6 @@ func startServer():
 		print_debug("opened UDP server: %s:%s" % [listenHost,listenPort])
 	
 	started = true
-	_isStarted = true
 	#var calibrate_on_ready=(
 		#func(package,own_method):
 			#onDataPackage.disconnect(own_method)
@@ -39,18 +30,65 @@ func startServer():
 
 func _ready():
 	started = false
-	_isStarted = false
-	_dataInfo=load("res://openseeface/DataInfo.gd").new(self)
-	onDataPackage.connect(_dataInfo.update_info)
-	
+	_dataInfo=load("res://openseeface/DataInfo.gd").new()
+	_dataInfo.ConnectInfoToSignal(self)
+func getPackage():return dataPackage
 
 func _process(_delta):
 	if _dataInfo:_dataInfo._update_features(_delta)
+#moved from inside the process so we don't create a new object every time
+var dataPackage := {
+	"time": -1,
+	"id": -1,
+	"cam": {
+		"x": -1,
+		"y": -1
+	},
+	"rightEyeOpen": -1,
+	"leftEyeOpen": -1,
+	"3d": -1,
+	"fitError": -1,
+	"quaternion": {
+		"x": -1,
+		"y": -1,
+		"z": -1,
+		"w": -1
+	},
+	"euler": {
+		"x": -1,
+		"y": -1,
+		"z": -1
+	},
+	"translation": {
+		"x": -1,
+		"y": -1,
+		"z": -1
+	},
+	"confidence": [],
+	"points": [],
+	"points3D": [],
+	"features": {
+		"EyeLeft": -1,
+		"EyeRight": -1,
+		"EyeBrowSteepnessLeft": -1,
+		"EyeBrowUpDownLeft": -1,
+		"EyeBrowQuirkLeft": -1,
+		"EyeBrowSteepnessRight": -1,
+		"EyeBrowUpDownRight": -1,
+		"EyeBrowQuirkRight": -1,
+		"MouthCornerUpDownLeft": -1,
+		"MouthCornerInOutLeft": -1,
+		"MouthCornerUpDownRight": -1,
+		"MouthCornerInOutRight": -1,
+		"MouthOpen": -1,
+		"MouthWide": -1
+	}
+}
 
 
 func _physics_process(_delta):
 	
-	if _isStarted == false:
+	if not started:
 		return
 		
 	# poll connections
@@ -65,53 +103,7 @@ func _physics_process(_delta):
 		conn.close()
 
 		# process data, prepare for signal
-		var dataPackage := {
-			"time": -1,
-			"id": -1,
-			"cam": {
-				"x": -1,
-				"y": -1
-			},
-			"rightEyeOpen": -1,
-			"leftEyeOpen": -1,
-			"3d": -1,
-			"fitError": -1,
-			"quaternion": {
-				"x": -1,
-				"y": -1,
-				"z": -1,
-				"w": -1
-			},
-			"euler": {
-				"x": -1,
-				"y": -1,
-				"z": -1
-			},
-			"translation": {
-				"x": -1,
-				"y": -1,
-				"z": -1
-			},
-			"confidence": [],
-			"points": [],
-			"points3D": [],
-			"features": {
-				"EyeLeft": -1,
-				"EyeRight": -1,
-				"EyeBrowSteepnessLeft": -1,
-				"EyeBrowUpDownLeft": -1,
-				"EyeBrowQuirkLeft": -1,
-				"EyeBrowSteepnessRight": -1,
-				"EyeBrowUpDownRight": -1,
-				"EyeBrowQuirkRight": -1,
-				"MouthCornerUpDownLeft": -1,
-				"MouthCornerInOutLeft": -1,
-				"MouthCornerUpDownRight": -1,
-				"MouthCornerInOutRight": -1,
-				"MouthOpen": -1,
-				"MouthWide": -1
-			}
-		}
+		
 
 		var streamBuff: StreamPeerBuffer = StreamPeerBuffer.new()
 		var streamPos = 0
@@ -263,4 +255,4 @@ func _physics_process(_delta):
 		streamPos = streamPos + 4
 		dataPackage["features"]["MouthWide"] = streamBuff.get_float()
 		
-		emit_signal("onDataPackage", dataPackage)
+		emit_signal("onDataPackage")
