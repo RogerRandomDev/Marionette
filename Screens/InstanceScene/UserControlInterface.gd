@@ -6,6 +6,8 @@ var keybinds_window=preload("res://Screens/InterfaceWindows/KeyBindsWindow.tscn"
 var variables_window=preload("res://Screens/InterfaceWindows/VariablesWindow.tscn").instantiate()
 var shapekeys_window=preload("res://Screens/InterfaceWindows/ShapeKeysWindow.tscn").instantiate()
 var skeleton_window=preload("res://Screens/InterfaceWindows/SkeletonWindow.tscn").instantiate()
+var instance_window=preload("res://Screens/InterfaceWindows/InstancedResourcesWindow.tscn").instantiate()
+
 
 var window_buttons={
 	"Tracking":OSF_LOAD,
@@ -14,7 +16,8 @@ var window_buttons={
 	"Variables":variables_window,
 	"KeyBinds":keybinds_window,
 	"ShapeKeys":shapekeys_window,
-	"Skeleton":skeleton_window
+	"Skeleton":skeleton_window,
+	"Instances":instance_window
 }
 
 

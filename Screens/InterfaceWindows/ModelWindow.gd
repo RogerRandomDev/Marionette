@@ -71,6 +71,7 @@ var model_controls:Array=[
 		"type":"Toggle",
 		"Name":"GazeTracked",
 		"text":"Track Gaze",
+		"meta_on_model":true,
 		"default":true
 	},
 	{
@@ -79,6 +80,7 @@ var model_controls:Array=[
 		"controlled_value":"leftEyeGaze,rightEyeGaze,horizontalLooking,verticalLooking",
 		"text":"Gaze Interpolation",
 		"range":Vector2(0,1),
+		"meta_on_model":true,
 		"forceDefaultIfFalse":"GazeTracked",
 		"default":0.0
 	},
@@ -86,6 +88,7 @@ var model_controls:Array=[
 		"type":"Toggle",
 		"Name":"HeadTrackedRot",
 		"text":"Track Head Rotation",
+		"meta_on_model":true,
 		"default":true
 	},
 	{
@@ -93,6 +96,7 @@ var model_controls:Array=[
 		"Name":"HeadRotInterp",
 		"controlled_value":"Quaternion,Euler",
 		"text":"Head Rotation Interpolation",
+		"meta_on_model":true,
 		"range":Vector2(0,1),
 		"forceDefaultIfFalse":"HeadTrackedRot",
 		"default":0.0
@@ -100,6 +104,7 @@ var model_controls:Array=[
 	{
 		"type":"Toggle",
 		"Name":"HeadTrackedPos",
+		"meta_on_model":true,
 		"text":"Track Head Position",
 		"default":false
 	},
@@ -107,6 +112,7 @@ var model_controls:Array=[
 		"type":"Interpolation",
 		"Name":"HeadPosInterp",
 		"controlled_value":"Translation",
+		"meta_on_model":true,
 		"text":"Head Position Interpolation",
 		"range":Vector2(0,1),
 		"forceDefaultIfFalse":"HeadTrackedPos",
@@ -127,12 +133,15 @@ var model_controls:Array=[
 	{
 		"type":"Function",
 		"text":"Calibrate Head Position",
-		"func":func():Globals.FaceHandler._dataInfo.calibrateFeature("Translation"),
+		"func":(func():
+			Globals.FaceHandler._dataInfo.calibrateFeature("Translation")
+			Globals.CalibratedPosition=Globals.FaceHandler._dataInfo.getHeadPosition())
+			,
 		"align":1
 		
 	}
 ]
-
+var reference_inputs:Dictionary={}
 
 func _ready():
 	#gives time to load OSFData from the config
@@ -169,9 +178,13 @@ func connect_controls():
 							var on_node=Globals.world
 							if control["toggle_on_node"]!="./":on_node=on_node.get_node(control["toggle_on_node"])
 							on_node.set(control["toggle_property"],is_pressed)
+							if control.get("meta_on_model",false):
+								if Globals.world.loaded_model==null:return
+								var model=Globals.world.loaded_model
+								model.set_meta("meta_var_modelwindow_%s"%control['Name'],is_pressed)
 					)
 				
-				
+				reference_inputs[control["Name"]]=edit
 			"Interpolation":
 				var holder=HBoxContainer.new()
 				var text=Label.new()
@@ -189,19 +202,26 @@ func connect_controls():
 				var check_against=$ScrollContainer/PanelContainer/VBoxContainer.get_node_or_null(control["forceDefaultIfFalse"])
 				if check_against:
 					check_against.get_child(1).toggled.connect(func(v):edit.value_changed.emit(edit.value))
-				edit.value_changed.connect(
-					func(new_value):
-						if check_against and not check_against.get_child(1).button_pressed:
-							new_value=control["default"]
-						var _data=OSF_LOAD.get_child(1)._dataInfo
-						if _data==null:return
-						if control.has("controlled_value"):
-							var values_controled=control["controlled_value"].split(",")
-							if control["controlled_value"].find(",")<0:
-								values_controled=[control["controlled_value"]]
-							for controlled_value in values_controled:
-								_data["features"][controlled_value]["interpolation"]=new_value
-				)
+				if control.has("func"):
+					edit.value_changed.connect(control.get("func"))
+				else:
+					edit.value_changed.connect(
+						func(new_value):
+							if check_against and not check_against.get_child(1).button_pressed:
+								new_value=control["default"]
+							var _data=OSF_LOAD.get_child(1)._dataInfo
+							if _data==null:return
+							if control.has("controlled_value"):
+								var values_controled=control["controlled_value"].split(",")
+								if control["controlled_value"].find(",")<0:
+									values_controled=[control["controlled_value"]]
+								for controlled_value in values_controled:
+									_data["features"][controlled_value]["interpolation"]=new_value
+							if control.get("meta_on_model",false):
+								if Globals.world.loaded_model==null:return
+								var model=Globals.world.loaded_model
+								model.set_meta("meta_var_modelwindow_%s"%control['Name'],new_value)
+					)
 				if(control.has("controlled_value")):
 					var values_controled=control["controlled_value"].split(",")
 					if control["controlled_value"].find(",")<0:
@@ -213,6 +233,7 @@ func connect_controls():
 				
 				text.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 				$ScrollContainer/PanelContainer/VBoxContainer.add_child(holder)
+				reference_inputs[control["Name"]]=edit
 			"Function":
 				var edit=Button.new()
 				edit.text=control.text
@@ -278,6 +299,11 @@ func load_model_config()->void:
 				)
 		model.head_bone_index=model_config.ModelSkeletonBoneData.HeadBone
 		model.eye_bone_indices=model_config.ModelSkeletonBoneData.EyeBones
+		var stored_vars=model_config.get("ModelVariables",null)
+		if stored_vars!=null:
+			model.update_stored_variables(stored_vars)
+			update_meta_vars(stored_vars)
+		
 	Globals.ShapeKeysInterfaceWindow.load_new_model_shapekeys.emit(model)
 
 
@@ -296,6 +322,24 @@ func get_store_data()->Dictionary:
 		"ModelSkeletonBoneData":{
 			"HeadBone":Globals.world.loaded_model.head_bone_index,
 			"EyeBones":Globals.world.loaded_model.eye_bone_indices
-		}
+		},
+		"ModelVariables":Globals.world.loaded_model.get_stored_variables()
 	}
 	return model_config
+
+##values stored as meta in the model for updating here
+func update_meta_vars(stored_vars)->void:
+	for key in stored_vars:
+		if key.begins_with("meta_var_modelwindow_"):
+			var key_true=key.trim_prefix("meta_var_modelwindow_")
+			var edit = reference_inputs[key_true]
+			if edit is SpinBox:
+				edit.value=stored_vars[key]
+				edit.value_changed.emit(stored_vars[key])
+				
+			if edit is Button:
+				edit.button_pressed=stored_vars[key]
+				edit.toggled.emit(stored_vars[key])
+		if key.begins_with("meta_var_global_"):
+			var key_true=key.trim_prefix("meta_var_global_")
+			Globals._set(key_true,stored_vars[key])

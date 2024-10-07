@@ -115,6 +115,8 @@ public partial class OSFHandler : Node
         features.Add("MouthCornerInOutRight",-1);
         features.Add("MouthOpen",-1);
         features.Add("MouthWide",-1);
+        features.Add("3DPoints",new Godot.Collections.Array<Vector3>());
+        features.Add("2DPoints",new Godot.Collections.Array<Vector2>());
         dataPackage.Add("features",features);
         
     }
@@ -190,8 +192,16 @@ public partial class OSFHandler : Node
                 Vector3 v = new Vector3(a,b,c);
                 ((Godot.Collections.Array)dataPackage["points3D"])[_i]=v;
             }
+
+            
+
             
             Godot.Collections.Dictionary features=(Godot.Collections.Dictionary)dataPackage["features"];
+
+
+            features["3DPoints"]=(Godot.Collections.Array<Vector3>)dataPackage["points3D"];
+            features["2DPoints"]=(Godot.Collections.Array<Vector2>)dataPackage["points"];
+
 
             features["EyeLeft"] =reader.ReadSingle();
             features["EyeRight"] =reader.ReadSingle();
@@ -218,6 +228,8 @@ public partial class OSFHandler : Node
 
             features["MouthWide"] =reader.ReadSingle();
 
+            
+
             EmitSignal("onDataPackage");
         }
 
@@ -236,6 +248,8 @@ public partial class OSFDataInfo : RefCounted
     Godot.Collections.Dictionary features=new Godot.Collections.Dictionary();
     Godot.Collections.Dictionary OSF_data;
     private float change_rate=24.0f;
+
+    public Godot.Vector2 camera_resolution=new Godot.Vector2(1f,1f);
 
     public void BuildDataInfo(){
         BuildFeature("EyeLeft",-1.0);
@@ -262,6 +276,8 @@ public partial class OSFDataInfo : RefCounted
         BuildFeature("rightEyeGaze",new Godot.Quaternion(0,0,0,1),true,new Godot.Quaternion(0,0,0,1).Normalized());
         BuildFeature("horizontalLooking",0.0);
         BuildFeature("verticalLooking",0.0);
+        BuildFeature("3DPoints",new Godot.Collections.Array<Vector3>(),false);
+        BuildFeature("2DPoints",new Godot.Collections.Array<Vector2>(),false);
         // BuildFeature("",-1.0);
     }
     private void BuildFeature(string featureName,Variant value,bool calibrate=false,Godot.Variant calibrate_base=new Godot.Variant()){
@@ -286,24 +302,36 @@ public partial class OSFDataInfo : RefCounted
             if((float)cont["interpolation"]==0.0){
                 cont["current_value"]=OSF_features[key];}
         }
+
+        Godot.Collections.Array points3D=(Godot.Collections.Array)OSF_data["points3D"];
+        Godot.Collections.Array points2D=(Godot.Collections.Array)OSF_data["points"];
+
+        Godot.Vector3 HeadPosition = ((Godot.Vector3)points3D[0]+(Godot.Vector3)points3D[16])*0.5f-(Godot.Vector3)(((Godot.Collections.Dictionary)features["Translation"])["calibrate"]);
+        
+        Godot.Collections.Dictionary translation = (Godot.Collections.Dictionary)features["Translation"];
+
+        translation["target_value"]=HeadPosition;
+        if((float)translation["interpolation"]==0.0f) translation["current_value"]=HeadPosition;
+
         ///Quaternion rotation for the head
         Godot.Collections.Dictionary quat =(Godot.Collections.Dictionary)OSF_data["quaternion"];
         Godot.Collections.Dictionary feat = (Godot.Collections.Dictionary)features["Quaternion"];
         Godot.Quaternion OSF_QUATERNION=new Godot.Quaternion((float)quat["x"],(float)quat["y"],(float)quat["z"],(float)quat["w"]);
         
+        Godot.Vector3 fixed_head = new Godot.Vector3(((Godot.Vector2)points2D[0]).X+((Godot.Vector2)points2D[16]).X,((Godot.Vector2)points2D[0]).Y+((Godot.Vector2)points2D[16]).Y,0.0f)*0.5f;
+
     	OSF_QUATERNION=Godot.Quaternion.FromEuler(
-    		OSF_QUATERNION.GetEuler()-((Godot.Quaternion)feat["calibrate"]).GetEuler()
+    		OSF_QUATERNION.GetEuler()-((Godot.Quaternion)feat["calibrate"]).GetEuler()-new Godot.Vector3((fixed_head.Y/camera_resolution.Y)*3.14156f-1.25664f,(fixed_head.X/camera_resolution.X)*3.14159f-1.25664f,0.0f)
 	    );
         feat["target_value"]=OSF_QUATERNION;
 	    if((float)feat["interpolation"]==0.0) feat["current_value"]=OSF_QUATERNION;
 
         //quaternions for the eye gaze directions
-        Godot.Collections.Array points3D=(Godot.Collections.Array)OSF_data["points3D"];
+        
 		Godot.Vector3 rightGaze = -Godot.Basis.LookingAt((Vector3)points3D[66]*new Vector3(-1,1,1) - (Vector3)points3D[68]*new Vector3(-1,1,1)).GetEuler();
 		Godot.Vector3 leftGaze = -Godot.Basis.LookingAt((Vector3)points3D[67]*new Vector3(-1,1,1) - (Vector3)points3D[69]*new Vector3(-1,1,1)).GetEuler();
         Godot.Collections.Dictionary leftEye=(Godot.Collections.Dictionary)features["leftEyeGaze"];
         Godot.Collections.Dictionary rightEye=(Godot.Collections.Dictionary)features["rightEyeGaze"];
-        
 
 		Godot.Quaternion rightGazeQ=Quaternion.FromEuler(
 				rightGaze-((Quaternion)rightEye["calibrate"]).GetEuler()
@@ -344,6 +372,7 @@ public partial class OSFDataInfo : RefCounted
         if((float)BlinkF["interpolation"]==0.0f) BlinkF["current_value"]=is_blinking?1f:0f;
 
 
+
     }
     
     public void _update_features(float delta){
@@ -367,6 +396,20 @@ public partial class OSFDataInfo : RefCounted
         }
         //needs to update eyes too now
         //they dont get interpolation currently
+        feat=(Godot.Collections.Dictionary)features["leftEyeGaze"];
+        if((float)feat["interpolation"]>0.0f){
+		    var cur_val=((Godot.Quaternion)feat["current_value"]).Normalized();
+		    var lerp_speed=feat["interpolation"];
+		    feat["current_value"]=((Godot.Quaternion)cur_val).Slerp(((Godot.Quaternion)feat["target_value"]).Normalized(),(float)lerp_speed*delta);
+            features["leftEyeGaze"]=feat;
+        }
+        feat=(Godot.Collections.Dictionary)features["rightEyeGaze"];
+        if((float)feat["interpolation"]>0.0f){
+		    var cur_val=((Godot.Quaternion)feat["current_value"]).Normalized();
+		    var lerp_speed=feat["interpolation"];
+		    feat["current_value"]=((Godot.Quaternion)cur_val).Slerp(((Godot.Quaternion)feat["target_value"]).Normalized(),(float)lerp_speed*delta);
+            features["rightEyeGaze"]=feat;
+        }
 
 
 
@@ -432,6 +475,11 @@ public partial class OSFDataInfo : RefCounted
             
         }
         
+    }
+
+    public Godot.Vector2 getHeadPosition(){
+        Godot.Collections.Array<Vector2> points = (Godot.Collections.Array<Vector2>)((Godot.Collections.Dictionary)features["2DPoints"])["target_value"];
+        return (points[0]+points[16])*0.5f;
     }
 
 

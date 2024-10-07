@@ -43,7 +43,8 @@ func load_available_models_and_environments()->void:
 	
 
 ##save current layout as a config to use when loading next time
-func _exit_tree():
+func _notification(what):
+	if what != NOTIFICATION_WM_CLOSE_REQUEST:return
 	var model=world_scene.get_node_or_null("SubViewport/MODEL")
 	var model_basis=Basis()
 	if model:model_basis=model.transform.basis
@@ -52,7 +53,7 @@ func _exit_tree():
 	
 	var screen_data=get_viewport().get_texture().get_image()
 	var screen_size=get_viewport().size
-	var screen_ratio=512.0/max(screen_size.x,screen_size.y)
+	var screen_ratio=1024.0/max(screen_size.x,screen_size.y)
 	screen_ratio=min(1,screen_ratio)
 	screen_size=Vector2i(screen_size*screen_ratio)
 	
@@ -73,6 +74,8 @@ func _exit_tree():
 	var file=FileAccess.open("user://Instances/%s.conf"%Globals.current_instance,FileAccess.WRITE)
 	file.store_var(config_data,true)
 	file.close()
+	
+	get_tree().quit()
 
 
 ##load current layout from config if it finds one

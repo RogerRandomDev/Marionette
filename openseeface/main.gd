@@ -220,6 +220,7 @@ func _ready() -> void:
 	
 	var run_button := %Run as Button
 	run_button.pressed.connect(func() -> void:
+		
 		if run_button.text!="Run":
 			%Run.text="Run"
 			if _tracker_pid>0:OS.kill(_tracker_pid)
@@ -252,7 +253,7 @@ func _ready() -> void:
 		
 		if not _use_binary and run_options.front() != null and not FileAccess.file_exists(run_options.front()):
 			return
-		
+		var bound_data={}
 		for child in _osf_options.get_children():
 			var val = child.option_value()
 			match typeof(val):
@@ -264,7 +265,9 @@ func _ready() -> void:
 						continue
 			run_options.push_back(OSF_OPTIONS[child.option_name()].flag)
 			run_options.push_back(val)
-			
+			bound_data[child.option_name()]=val
+		Globals.CameraResolution=Vector2(str_to_var(bound_data["Width"]),str_to_var(bound_data["Height"]))
+		Globals.FaceHandler._dataInfo.camera_resolution=Globals.CameraResolution
 		#var option_count=len(run_options)
 		#for i in range(1,ceil(option_count/2)):
 			#var option_i=run_options[i+1]

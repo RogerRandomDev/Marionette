@@ -8,7 +8,8 @@ var preview_images:Array=[]
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	root_instance_item=(%InstanceList as Tree).create_item()
-	
+	Globals.CameraResolution=Vector2.ONE
+	Globals.CalibratedPosition=Vector2.ZERO
 	%InstanceList.item_selected.connect(func():
 		for child in root_instance_item.get_children():child.set_editable(0,false)
 		var selected=%InstanceList.get_selected()
@@ -16,12 +17,15 @@ func _ready():
 		#honestly not needed but i wanted it to look nicer
 		#so i upscale manually from here
 		var icon=selected.get_icon(0) as ImageTexture
-		var img=icon.get_image()
-		var s=img.get_size()
-		var viewport_size=get_viewport_rect().size
-		var scaled_img=max(viewport_size.x/s.x,viewport_size.y/s.y)
-		img.resize(s.x*scaled_img,s.y*scaled_img,Image.INTERPOLATE_LANCZOS)
-		%InstancePreviewTex.texture=ImageTexture.create_from_image(img)
+		if icon and icon.get_image():
+			var img=icon.get_image()
+			var s=img.get_size()
+			var viewport_size=get_viewport_rect().size
+			var scaled_img=max(viewport_size.x/s.x,viewport_size.y/s.y)
+			img.resize(s.x*scaled_img,s.y*scaled_img,Image.INTERPOLATE_LANCZOS)
+			%InstancePreviewTex.texture=ImageTexture.create_from_image(img)
+		else:
+			%InstancePreviewTex.texture=null
 		
 		)
 	
@@ -115,4 +119,7 @@ func load_instance_list()->void:
 		%InstanceList.resized.connect(func():
 			new_item.set_icon_max_width(0,min(%InstanceList.size.x*0.5,256))
 			)
-		
+
+func _notification(what):
+	if what != NOTIFICATION_WM_CLOSE_REQUEST:return
+	get_tree().quit()

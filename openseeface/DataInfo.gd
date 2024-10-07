@@ -86,7 +86,8 @@ class_name OSFDataInfo
 	"Translation":{
 		"interpolation":0.0,
 		"target_value":Vector3.ZERO,
-		"current_value":Vector3.ZERO
+		"current_value":Vector3.ZERO,
+		"calibrate":Vector3.ZERO
 	},
 	"Quaternion":{
 		"interpolation":0.5,
@@ -211,6 +212,7 @@ func update_info()->void:
 	### EYE GAZE LEFT/RIGHT
 	###
 	### IF BLINKING, IT WON'T UPDATE TO PREVENT EYES BEING JUMPY
+	
 	if !is_blinking:
 		var points3D=OSF_data["points3D"]
 		var rightGaze = -Basis().looking_at(points3D[66]*Vector3(-1,1,1) - points3D[68]*Vector3(-1,1,1)).get_euler();
@@ -248,11 +250,19 @@ func update_info()->void:
 	###
 	### TRANSLATION/HEAD POSITION
 	###
-	var head_pos=Vector3(
-		OSF_data["translation"]["x"],
-		OSF_data["translation"]["y"],
-		OSF_data["translation"]["z"]
-	)
+	#it tracks between your ears since this normally wonr work by just getting
+	#the translation data. for some reason it is always zero by default
+	#so this method is functional and more controlled personally
+	
+	#var head_pos=Vector3(
+		#OSF_data["translation"]["x"],
+		#OSF_data["translation"]["y"],
+		#OSF_data["translation"]["z"]
+	#)
+	var head_pos=OSF_data["points3D"][0]
+	
+	
+	
 	features["Translation"]["target_value"]=head_pos
 	if features["Translation"]["interpolation"]==0.0:
 		features["Translation"]["current_value"]=head_pos
@@ -310,6 +320,7 @@ func _update_features(delta:float)->void:
 		features["rightEyeGaze"]["current_value"]=cur_val.slerp(features["rightEyeGaze"]["target_value"],lerp_speed*delta)
 	#for feature in feature_signals:
 		#feature_signals[feature].emit(features[feature]["current_value"])
+	
 
 ##recalibrates values so that current situation is forward/normal
 func calibrate()->void:

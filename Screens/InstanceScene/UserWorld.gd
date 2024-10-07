@@ -9,7 +9,7 @@ var rotateCamera:bool=false
 var zoomCamera:bool=false
 
 func _ready():
-	pass
+	bindFileDrops()
 
 
 func load_OSF()->void:
@@ -51,3 +51,16 @@ func load_environment(model:Node)->void:
 func _input(event):
 	$SubViewport/Camera3D._input(event)
 
+
+##allows you to drag-and-drop a file and for it to attempt to be loaded/handled
+func bindFileDrops()->void:
+	get_tree().root.files_dropped.connect(
+		func(files:PackedStringArray):
+			for file in files:
+				#if the file was a png
+				if file.ends_with(".png"):
+					var default=InteractiveSprite.new(ImageTexture.create_from_image(Image.load_from_file(file)))
+					add_child(default)
+					default.global_position=get_global_mouse_position()-default.size*0.5
+					
+	)

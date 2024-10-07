@@ -29,13 +29,8 @@ func _ready():
 
 
 func _model_update(model_data)->void:
+	super._model_update(model_data)
 	
-	
-	
-	###
-	### rotate goober's head to match my own
-	###
-	_head_rotation_update(model_data["Quaternion"].current_value)
 	###
 	### flop the ears when i open my mouth/widen my mouth
 	###
@@ -57,13 +52,17 @@ func _model_update(model_data)->void:
 	###
 	### BLINK CONTROL
 	###
-	var blink_tolerance:float=-0.7
+	var blink_tolerance:float=-0.87
 	var is_blink=!(
 		(model_data.EyeLeft.current_value+model_data.EyeRight.current_value)*0.5<blink_tolerance
 	)
 	$TheGoober/Armature/Skeleton3D/EyeWhite/EyeWhite.scale=Vector3(1,float(is_blink)*0.9+0.1,1)
 
-
+func _points2d_update(points)->void:
+	points = points.target_value
+	if len(points)==0:return
+	var custom_offset=(((points[0]+points[16])*0.5)-Globals.CalibratedPosition)/Globals.CameraResolution
+	$TheGoober.position=Vector3(custom_offset.x,-custom_offset.y,0)
 
 
 
