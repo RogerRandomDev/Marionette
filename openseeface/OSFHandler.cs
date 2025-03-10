@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Net.Http;
 
@@ -481,11 +482,23 @@ public partial class OSFDataInfo : RefCounted
         Godot.Collections.Array<Vector2> points = (Godot.Collections.Array<Vector2>)((Godot.Collections.Dictionary)features["2DPoints"])["target_value"];
         return (points[0]+points[16])*0.5f;
     }
-
-
+    List<OSFDataInfo.info_updatedEventHandler> callbacks = new List<OSFDataInfo.info_updatedEventHandler>();
     public void bindEvent(Callable eventCallable){
-        info_updated+=(data)=>eventCallable.Call(data);
+        OSFDataInfo.info_updatedEventHandler placeholder=((Godot.Collections.Dictionary data)=>eventCallable.Call(data));
+        callbacks.Add(placeholder);
+        if(callbacks.Count>1) unbindEvent();
+
+        info_updated+=placeholder;
+        GD.PrintRaw("BOUND");
     }
+    public void unbindEvent(){
+        OSFDataInfo.info_updatedEventHandler c_back;
+        c_back=callbacks[0];
+        info_updated-=c_back;
+        callbacks.Remove(c_back);
+        GD.PrintRaw("UNBOUND");
+    }
+
     public void ConnectInfoToSignal(OSFHandlerNode.OSFHandler handler){
         handler.onDataPackage += update_info;
         OSF_data=handler.getPackage();

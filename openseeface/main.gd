@@ -147,27 +147,28 @@ const OSF_OPTIONS := {
 }
 class OsfOption extends HBoxContainer:
 	var _label: Label = null
+	@warning_ignore("unused_private_class_variable")
 	var _line_edit: LineEdit = null
 	var _element: Control = null
 	
 	func _init(
-		option_name: String,
-		option_value: Variant,
+		opt_name: String,
+		opt_value: Variant,
 		callback: Callable,
 		hint: String,
 		element_type: int
 	) -> void:
 		_label = Label.new()
 		_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		_label.text = option_name
+		_label.text = opt_name
 		
 		if element_type == TYPE_STRING:
 			_element = LineEdit.new()
-			_element.text = option_value
+			_element.text = opt_value
 			_element.text_changed.connect(callback)
 		else:
 			_element = CheckBox.new()
-			_element.button_pressed = option_value
+			_element.button_pressed = opt_value
 			_element.toggled.connect(callback)
 		
 		_element.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -210,8 +211,12 @@ var _osf_options := %OsfOptions as VBoxContainer
 #-----------------------------------------------------------------------------#
 
 func _ready() -> void:
+	_osf_path.secret=true
+	_binary_path.secret=true
+	_python_path.secret=true
 	join_tracker()
-	_config = _read_config()
+	@warning_ignore("static_called_on_instance")
+	_config = self._read_config()
 	#loads into globals the face handler
 	Globals.FaceHandler=$OpenSeeFaceHandler
 	
@@ -290,8 +295,8 @@ func _ready() -> void:
 	python_options.hide()
 	
 	%ChooseBinary.pressed.connect(func() -> void:
-		var popup := _show_file_dialog()
-		popup.file_selected.connect(func(path: String) -> void:
+		var d_popup := _show_file_dialog()
+		d_popup.file_selected.connect(func(path: String) -> void:
 			_binary_path.text = path
 			_config.binary_path = path
 		)
@@ -299,16 +304,17 @@ func _ready() -> void:
 	_binary_path.text = _config.binary_path
 	
 	%ChoosePython.pressed.connect(func() -> void:
-		var popup := _show_file_dialog()
-		popup.file_selected.connect(func(path: String) -> void:
+		var d_popup := _show_file_dialog()
+		d_popup.file_selected.connect(func(path: String) -> void:
 			_python_path.text = path
 			_config.python_path = path
 		)
 	)
 	_python_path.text = _config.python_path
 	%ChooseOsf.pressed.connect(func() -> void:
-		var popup := _show_file_dialog(FileDialog.FILE_MODE_OPEN_DIR)
-		popup.dir_selected.connect(func(path: String) -> void:
+		var d_popup := _show_file_dialog(FileDialog.FILE_MODE_OPEN_DIR)
+		
+		d_popup.dir_selected.connect(func(path: String) -> void:
 			_osf_path.text = path
 			_config.osf_path = path
 		)
@@ -339,6 +345,7 @@ func _ready() -> void:
 	_update_status("Ready!")
 
 func _exit_tree() -> void:
+	@warning_ignore("static_called_on_instance")
 	_write_config(_config)
 	
 	# Technically this should be -1, but PID 0 is usually the system root process
@@ -354,21 +361,22 @@ func _update_status(text: String) -> void:
 	_status.text = "[right][rainbow][wave]%s[/wave][/rainbow][/right]" % text
 
 func _show_file_dialog(file_mode: int = FileDialog.FILE_MODE_OPEN_FILE) -> FileDialog:
-	var popup := FileDialog.new()
-	popup.file_mode = file_mode
-	popup.access = FileDialog.ACCESS_FILESYSTEM
+	var d_popup := FileDialog.new()
+	@warning_ignore("int_as_enum_without_cast")
+	d_popup.file_mode = file_mode
+	d_popup.access = FileDialog.ACCESS_FILESYSTEM
 	
-	add_child(popup)
-	popup.popup_centered_ratio(0.5)
+	add_child(d_popup)
+	d_popup.popup_centered_ratio(0.5)
 	
-	popup.close_requested.connect(func() -> void:
-		popup.queue_free()
+	d_popup.close_requested.connect(func() -> void:
+		d_popup.queue_free()
 	)
-	popup.visibility_changed.connect(func() -> void:
-		popup.close_requested.emit()
+	d_popup.visibility_changed.connect(func() -> void:
+		d_popup.close_requested.emit()
 	)
 	
-	return popup
+	return d_popup
 
 static func _read_config() -> Config:
 	var config: Resource = ResourceLoader.load(Config.SAVE_PATH, "tres")

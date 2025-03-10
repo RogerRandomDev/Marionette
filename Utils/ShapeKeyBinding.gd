@@ -5,6 +5,7 @@ var shapekeyBinds:Array=[]
 
 
 
+@warning_ignore("shadowed_global_identifier")
 func create_bind(mesh,key,scale,offset,min,max,feature,feature_name)->bindRes:
 	var newBind = bindRes.new(mesh,key,scale,offset,min,max,feature,feature_name)
 	shapekeyBinds.push_back(newBind)
@@ -19,7 +20,7 @@ func clear_binds()->void:
 
 
 
-func _process(delta):
+func _process(_delta):
 	update_binds()
 
 func update_binds()->void:
@@ -47,6 +48,7 @@ class bindRes extends Resource:
 	var feature_linked:Dictionary={}
 	var feature_name:String=""
 	
+	@warning_ignore("shadowed_global_identifier")
 	func _init(mesh:MeshInstance3D,key:int,scale:float,offset:float,min:float,max:float,feature:Dictionary,feature_n:String)->void:
 		on_mesh=mesh;key_id=key;scale_feature=scale;offset_feature=offset;feature_linked=feature;feature_min=min;feature_max=max;feature_name=feature_n;
 	

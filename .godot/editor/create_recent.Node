@@ -1,3 +1,7 @@
+LineEdit
+SubViewport
+SubViewportContainer
+MeshInstance3D
 VBoxContainer
 Tree
 Sprite2D
@@ -8,7 +12,3 @@ Polygon2D
 Node2D
 Node
 HSplitContainer
-HBoxContainer
-Button
-TextureRect
-ConfirmationDialog

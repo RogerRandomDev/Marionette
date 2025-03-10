@@ -15,7 +15,12 @@ func _ready():
 func load_OSF()->void:
 	var data_ref=Globals.FaceHandler._dataInfo
 	last_ref=data_ref
-	if data_ref!=null:data_ref.bindEvent(get_node("SubViewport/MODEL")._model_update)
+	var model_node=get_node_or_null("SubViewport/MODEL")
+	for child in get_node_or_null("SubViewport").get_children():
+		print(child.name)
+	if model_node!=null and data_ref!=null:
+		data_ref.bindEvent(model_node._model_update)
+		#model_node.tree_exiting.connect(func():data_ref.unbindEvent())
 	#if data_ref!=null:data_ref.info_updated.connect(get_node("SubViewport/MODEL")._model_update)
 
 
@@ -26,7 +31,7 @@ func load_model(model:Node,old_path:String="")->void:
 	loaded_model=model
 	$SubViewport.add_child(model)
 	model.name="MODEL"
-	load_OSF.call_deferred()
+	Globals.world.load_OSF()
 	Globals.VariablesInterfaceWindow.load_changable_variables(0)
 	
 	#load model keybinds

@@ -21,7 +21,7 @@ func _ready()->void:
 		var tree_root=(shapekey_tree as Tree).create_item()
 		tree_root.set_meta("is_shapekey",false)
 		
-		var recursive_func=(func(node,recursive_func):
+		var recursive_func2=(func(node,recursive_func):
 			for child in node.get_children():
 				if child is MeshInstance3D:
 					var child_item=tree_root.create_child()
@@ -51,7 +51,7 @@ func _ready()->void:
 				recursive_func.call(child,recursive_func)
 			)
 		#initiate the recursive loops
-		recursive_func.call(model,recursive_func)
+		recursive_func2.call(model,recursive_func2)
 		)
 	)
 	
@@ -79,7 +79,7 @@ func _ready()->void:
 		if not selected.get_meta("is_shapekey",false):
 			shapekey_tree.nothing_selected.emit()
 			return
-		var selected_name=selected.get_text(0)
+		#var selected_name=selected.get_text(0)
 		for child in $ScrollContainer/PanelContainer/HBox/VBoxContainer.get_children():
 			child.show()
 		feature_current.value=selected.get_meta("on_instance",null).get_blend_shape_value(selected.get_meta("index",0))

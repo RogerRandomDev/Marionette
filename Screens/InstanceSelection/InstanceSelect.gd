@@ -111,6 +111,7 @@ func load_instance_list()->void:
 		if not conf_data.has("PreviewScreenshot"):continue
 		var screenshot_data=conf_data.PreviewScreenshot
 		var decompressed_screenshot=screenshot_data.data.decompress(screenshot_data.size.x*screenshot_data.size.y*3,3)
+		@warning_ignore("int_as_enum_without_cast")
 		var img=Image.create_from_data(screenshot_data.size.x,screenshot_data.size.y,false,4,decompressed_screenshot)
 		var tex=ImageTexture.create_from_image(img)
 		preview_images.push_back(tex)

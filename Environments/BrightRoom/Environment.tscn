@@ -1,6 +1,18 @@
-[gd_scene load_steps=2 format=3 uid="uid://c60iumkfmfmoy"]
+[gd_scene load_steps=5 format=3 uid="uid://c60iumkfmfmoy"]
 
 [ext_resource type="Script" path="res://Environments/BrightRoom/BrightRoom.gd" id="1_u7yxe"]
+[ext_resource type="Shader" path="res://Environments/BrightRoom/screen_shader.gdshader" id="2_4k1bc"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4o16x"]
+render_priority = 0
+shader = ExtResource("2_4k1bc")
+shader_parameter/color_depth = 6
+shader_parameter/dithering = false
+shader_parameter/resolution_scale = 2
+
+[sub_resource type="QuadMesh" id="QuadMesh_7p6v0"]
+flip_faces = true
+size = Vector2(2, 2)
 
 [node name="BrightRoom" type="Node3D"]
 script = ExtResource("1_u7yxe")
@@ -24,3 +36,7 @@ grow_vertical = 2
 mouse_filter = 0
 expand_mode = 4
 stretch_mode = 6
+
+[node name="ScreenShader" type="MeshInstance3D" parent="."]
+material_override = SubResource("ShaderMaterial_4o16x")
+mesh = SubResource("QuadMesh_7p6v0")

@@ -21,7 +21,7 @@ func load_changable_variables(changed_type:int=0)->void:
 	#now model variables
 	var model=Globals.world.loaded_model
 	variables={}
-	if model!=null:variables=model.get('ModelValues')
+	if model!=null:variables=model._get_model_variables()
 	if variables==null:variables={}
 	var mdl_lbl:Label=Label.new()
 	mdl_lbl.text="MODEL"
@@ -52,6 +52,9 @@ func load_variable(variable_content,variable,update_value:bool=false)->void:
 				edit.value_changed.connect(variable_content["func"])
 			
 			if update_value:edit.value_changed.emit(variable_content.default)
+			if variable_content.has("default"):
+				edit.value=variable_content["default"]
+			
 			
 			$ScrollContainer/PanelContainer/VBoxContainer.add_child(holder)
 		"ColorPicker":

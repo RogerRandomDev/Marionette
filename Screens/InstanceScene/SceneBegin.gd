@@ -49,7 +49,12 @@ func _notification(what):
 	var model_basis=Basis()
 	if model:model_basis=model.transform.basis
 	world_control_interface.visible=false
+	for button in world_control_interface.window_buttons.values():
+		button.hide()
 	
+	
+	await get_tree().process_frame
+	await get_tree().process_frame
 	
 	var screen_data=get_viewport().get_texture().get_image()
 	var screen_size=get_viewport().size

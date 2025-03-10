@@ -17,7 +17,6 @@ initial_position = 4
 size = Vector2i(512, 480)
 visible = false
 wrap_controls = true
-mouse_passthrough = true
 min_size = Vector2i(256, 256)
 keep_title_visible = true
 content_scale_mode = 1

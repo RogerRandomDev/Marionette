@@ -44,7 +44,6 @@ func _ready():
 		if window_buttons[button].get_parent()==null:add_child(window_buttons[button])
 	
 	
-	
 
 func _input(event):
 	if event is InputEventKey and event.echo==false and event.pressed and event.as_text()=="Escape":

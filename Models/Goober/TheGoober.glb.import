@@ -35,10 +35,6 @@ _subresources={
 "use_external/enabled": true,
 "use_external/path": "res://Models/Goober/Eyes.res"
 },
-"Outline": {
-"use_external/enabled": true,
-"use_external/path": "res://Models/Goober/outline.res"
-},
 "PotatoPin": {
 "use_external/enabled": true,
 "use_external/path": "res://Models/Goober/potatopin.res"
