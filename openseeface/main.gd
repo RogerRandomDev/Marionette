@@ -279,8 +279,7 @@ func _ready() -> void:
 			#run_options[i]+="="+option_i
 			#run_options.remove_at(i+1)
 		run_options.push_back("-M")
-		#print(run_options)
-		
+		print(run_options)
 		var pid := OS.create_process(exe_path, run_options, true)
 		if pid < 0:
 			self._update_status("Unable to start tracker")

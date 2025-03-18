@@ -29,6 +29,9 @@ func _ready():
 func _process(delta):
 	blink_time_left=max(blink_time_left-delta,0.0)
 
+func _input(event):
+	if event.as_text().to_lower()=="q" and not event.is_echo() and event.is_pressed():
+		$GPUParticles3D.emitting=true
 
 
 func _model_update(model_data)->void:
